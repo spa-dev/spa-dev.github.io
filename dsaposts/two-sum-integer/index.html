@@ -104,7 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -130,7 +130,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../dsa.html"> 
-<span class="menu-text">NeetCode</span></a>
+<span class="menu-text">LeetCode</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about.html"> 
@@ -214,23 +214,24 @@ Output: [0,1]
 </section>
 <section id="initial-solution" class="level2">
 <h2 class="anchored" data-anchor-id="initial-solution">Initial Solution</h2>
-<div id="a385102c" class="cell" data-execution_count="1">
+<div id="0aa59c08" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List, Callable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0f90436f" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> JankySolution:</span>
+<div id="08713079" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> twoSum(<span class="va">self</span>, nums: List[<span class="bu">int</span>], target: <span class="bu">int</span>) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, i_num <span class="kw">in</span> <span class="bu">enumerate</span>(nums):</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j, j_num <span class="kw">in</span> <span class="bu">enumerate</span>(nums[<span class="dv">1</span>:]): </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i_num <span class="op">+</span> j_num <span class="op">==</span> target <span class="kw">and</span> i <span class="op">!=</span> j<span class="op">+</span><span class="dv">1</span>: <span class="co"># 'and' to ensure i != j </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i_num <span class="op">+</span> j_num <span class="op">==</span> target <span class="kw">and</span> i <span class="op">!=</span> j<span class="op">+</span><span class="dv">1</span>: <span class="co"># must 'and' to ensure i != j </span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">return</span> [i,j<span class="op">+</span><span class="dv">1</span>]</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [] <span class="co"># not really needed as we are told a solution exists</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Note: I first tried to ensure <code>i != j</code> by starting the <code>for j</code> loop at <code>[1:]</code> instead of 0. This failed the following case, which led me to add the ‘and’ operator in the final check, at which point it was apparent the slicing was unnecessary.</p>
+<p>Note: I first tried to ensure <code>i != j</code> by starting the <code>for j</code> loop at <code>[1:]</code> instead of 0. This failed the following case, which led me to add the <code>and</code> operator in the equality check, at which point it was apparent the slicing was unnecessary. Careful reading of the question indicates that the indices are not allowed to be equal, but there is no restriction on the numbers being equal.</p>
 <pre><code>nums = [2,5,5,11]
 target = 10
 output = [1,2]</code></pre>
-<div id="f49f1548" class="cell" data-execution_count="3">
+<p>Let’s clean up the function:</p>
+<div id="8800d611" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BruteForceSolution:</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> twoSum(<span class="va">self</span>, nums: List[<span class="bu">int</span>], target: <span class="bu">int</span>) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, i_num <span class="kw">in</span> <span class="bu">enumerate</span>(nums):</span>
@@ -239,7 +240,7 @@ output = [1,2]</code></pre>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">return</span> [i,j]</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> []</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="8ed83a87" class="cell" data-execution_count="4">
+<div id="869d2101" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples for testing purposes.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#nums, target = [3,4,5,6], 7 # output [0,1]</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#nums, target = [4,5,6], 10 # output [0,2]</span></span>
@@ -247,7 +248,7 @@ output = [1,2]</code></pre>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#nums, target = [3,2,4], 6 # output [1,2]</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>nums, target <span class="op">=</span> [<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">11</span>], <span class="dv">10</span> <span class="co"># output [1,2] # tricky</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#solution = JankySolution()</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#solution = InitialSolution()</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> BruteForceSolution()</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>solution.twoSum(nums, target)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
@@ -262,7 +263,7 @@ output = [1,2]</code></pre>
 </section>
 <section id="tests" class="level2">
 <h2 class="anchored" data-anchor-id="tests">Tests</h2>
-<div id="d8f3dd94" class="cell" data-execution_count="5">
+<div id="3fa5f6c7" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test(fn: Callable[[List[<span class="bu">int</span>], <span class="bu">int</span>], List[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    nums, target <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], <span class="dv">7</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>]</span>
@@ -285,7 +286,7 @@ output = [1,2]</code></pre>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output <span class="op">==</span> fn(nums, target)</span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Tests Passed'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="266fac3a" class="cell" data-execution_count="6">
+<div id="daf362a7" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> BruteForceSolution()</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>test(solution.twoSum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -295,7 +296,7 @@ output = [1,2]</code></pre>
 </section>
 <section id="neetcode-solution" class="level1">
 <h1>NeetCode Solution</h1>
-<div id="79ef782c" class="cell" data-execution_count="7">
+<div id="3bd435f2" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> twoSum(<span class="va">self</span>, nums: List[<span class="bu">int</span>], target: <span class="bu">int</span>) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        prevMap <span class="op">=</span> {}  <span class="co"># val -&gt; index</span></span>
@@ -306,7 +307,7 @@ output = [1,2]</code></pre>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> [prevMap[diff], i]</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            prevMap[n] <span class="op">=</span> i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="2c2f7fc8" class="cell" data-execution_count="8">
+<div id="423c7b16" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>test(solution.twoSum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -314,10 +315,10 @@ output = [1,2]</code></pre>
 </div>
 </div>
 <p><strong>Conclusion:</strong></p>
-<p>The above code represents a more optimal solution. It uses a hashmap (dictionary) called <code>prevMap</code> that stores previously encountered numbers as keys with their corresponding indices as values. Here <code>prevMap</code> acts as a lookup table to quickly check if the complement of the current number (i.e., the number needed to reach the target) has been seen before. This method has a time complexity of O(n) because it processes each element of the list once only.</p>
+<p>The above code represents a more optimal solution. It uses a hashmap (dictionary) called <code>prevMap</code> that stores previously encountered numbers as keys with their corresponding indices as values. Here <code>prevMap</code> acts as a lookup table to quickly check if the complement of the current number (i.e., the number needed to reach the target) has been seen before. This method has a time complexity of O(n) because it processes each element of the list once only. A little extra memory is needed, since we have to create the lookup table.</p>
 <ul>
 <li>Time complexity: O(n)</li>
-<li>Space complexity O(n)</li>
+<li>Space complexity: O(n)</li>
 </ul>
 
 

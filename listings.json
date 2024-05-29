@@ -2,9 +2,9 @@
   {
     "listing": "/dsa.html",
     "items": [
-      "/dsaposts/welcome/index.html",
       "/dsaposts/contains-duplicate/index.html",
-      "/dsaposts/two-sum-integer/index.html"
+      "/dsaposts/two-sum-integer/index.html",
+      "/dsaposts/welcome/index.html"
     ]
   }
 ]
