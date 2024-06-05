@@ -1,7 +1,14 @@
 [
   {
+    "listing": "/fastai.html",
+    "items": [
+      "/fastai/fastai-P2L10/fastai-P2L10-sd.html"
+    ]
+  },
+  {
     "listing": "/dsa.html",
     "items": [
+      "/dsaposts/group-anagrams/index.html",
       "/dsaposts/contains-duplicate/index.html",
       "/dsaposts/two-sum-integer/index.html",
       "/dsaposts/welcome/index.html"
