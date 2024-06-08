@@ -8,7 +8,7 @@
   {
     "listing": "/dsa.html",
     "items": [
-      "/dsaposts/group-anagrams/index.html",
+      "/dsaposts/group-anagrams/GroupAnagrams.html",
       "/dsaposts/contains-duplicate/index.html",
       "/dsaposts/two-sum-integer/index.html",
       "/dsaposts/welcome/index.html"
