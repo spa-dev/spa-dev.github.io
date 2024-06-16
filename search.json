@@ -63,46 +63,32 @@
     "text": "spa-dev: an obvious work-in-progress"
   },
   {
-    "objectID": "dsaposts/two-sum-integer/index.html",
-    "href": "dsaposts/two-sum-integer/index.html",
-    "title": "LeetCode 1: Two Integer Sum",
+    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html",
+    "href": "dsaposts/group-anagrams/GroupAnagrams.html",
+    "title": "LeetCode 49: Group Anagrams",
     "section": "",
-    "text": "Difficulty: Easy\nGiven an array of integers nums and an integer target, return the indices i and j such that nums[i] + nums[j] == target and i != j.\nAssume that every input has exactly one pair of indices i and j that satisfy the condition.\nReturn the answer with the smaller index first.\nExample:\nInput: \nnums = [3,4,5,6], target = 7\nOutput: [0,1]\n# Explanation: nums[0] + nums[1] == 7, so we return [0, 1].\nAdditional examples are provided in the tests below."
+    "text": "Difficulty: Medium\nGiven an array of strings strs, group all anagrams together into sublists. You may return the output in any order.\nExample 1:\nInput: strs = [\"act\",\"pots\",\"tops\",\"cat\",\"stop\",\"hat\"]\nOutput: [[\"hat\"],[\"act\", \"cat\"],[\"stop\", \"pots\", \"tops\"]]\nExample 2:\nInput: strs = [\"x\"]\nOutput: [[\"x\"]]\nExample 3:\nInput: strs = [\"\"]\nOutput: [[\"\"]]"
   },
   {
-    "objectID": "dsaposts/two-sum-integer/index.html#problem-description",
-    "href": "dsaposts/two-sum-integer/index.html#problem-description",
-    "title": "LeetCode 1: Two Integer Sum",
+    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html#problem-description",
+    "href": "dsaposts/group-anagrams/GroupAnagrams.html#problem-description",
+    "title": "LeetCode 49: Group Anagrams",
     "section": "",
-    "text": "Difficulty: Easy\nGiven an array of integers nums and an integer target, return the indices i and j such that nums[i] + nums[j] == target and i != j.\nAssume that every input has exactly one pair of indices i and j that satisfy the condition.\nReturn the answer with the smaller index first.\nExample:\nInput: \nnums = [3,4,5,6], target = 7\nOutput: [0,1]\n# Explanation: nums[0] + nums[1] == 7, so we return [0, 1].\nAdditional examples are provided in the tests below."
+    "text": "Difficulty: Medium\nGiven an array of strings strs, group all anagrams together into sublists. You may return the output in any order.\nExample 1:\nInput: strs = [\"act\",\"pots\",\"tops\",\"cat\",\"stop\",\"hat\"]\nOutput: [[\"hat\"],[\"act\", \"cat\"],[\"stop\", \"pots\", \"tops\"]]\nExample 2:\nInput: strs = [\"x\"]\nOutput: [[\"x\"]]\nExample 3:\nInput: strs = [\"\"]\nOutput: [[\"\"]]"
   },
   {
-    "objectID": "dsaposts/two-sum-integer/index.html#initial-solution",
-    "href": "dsaposts/two-sum-integer/index.html#initial-solution",
-    "title": "LeetCode 1: Two Integer Sum",
+    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html#initial-solution",
+    "href": "dsaposts/group-anagrams/GroupAnagrams.html#initial-solution",
+    "title": "LeetCode 49: Group Anagrams",
     "section": "Initial Solution",
-    "text": "Initial Solution\n\nfrom typing import List, Callable\n\n\nclass InitialSolution:\n    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:\n        for i, i_num in enumerate(nums):\n            for j, j_num in enumerate(nums[1:]): \n                if i_num + j_num == target and i != j+1: # must 'and' to ensure i != j \n                    return [i,j+1]\n        return [] # not really needed as we are told a solution exists\n\nNote: I first tried to ensure i != j by starting the for j loop at [1:] instead of 0. This failed the following case, which led me to add the and operator in the equality check, at which point it was apparent the slicing was unnecessary. Careful reading of the question indicates that the indices are not allowed to be equal, but there is no restriction on the numbers being equal.\nnums = [2,5,5,11]\ntarget = 10\noutput = [1,2]\nLet’s clean up the function:\n\nclass BruteForceSolution:\n    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:\n        for i, i_num in enumerate(nums):\n            for j, j_num in enumerate(nums): \n                if i_num + j_num == target and i != j:\n                    return [i,j]\n        return []\n\n\n# Examples for testing purposes.\n#nums, target = [3,4,5,6], 7 # output [0,1]\n#nums, target = [4,5,6], 10 # output [0,2]\n#nums, target = [3,3], 6 # output [0,1] \n#nums, target = [3,2,4], 6 # output [1,2]\nnums, target = [2,5,5,11], 10 # output [1,2] # tricky\n\n#solution = InitialSolution()\nsolution = BruteForceSolution()\nsolution.twoSum(nums, target)\n\nInitial Results:\nBruteForceSolution passes NeetCode submission.\n\nTime Complexity: O(n)*O(n) = O(n2)"
+    "text": "Initial Solution\nThe key to this problem was to recognize that when anagrams are sorted alphabetically, they become the same ‘word’. With that in mind, a decent solution seemed relatively easy to come up with. Let’s just sort the words and place the original word in a dictionary with the keys being the unique sorted/garbled word.\nThere are a few parts that could potentially trip up a beginner:\nFirstly, calling sorted() on a string returns a list of the sorted characters and not a whole sorted word:\nword = 'hello'\nsorted_word = sorted(word)\nprint(sorted_word)\n&gt;&gt;&gt; ['e', 'h', 'l', 'l', 'o']\nSo we must join() the list back together afterwards.\nSecondly, adding values to a pre-existing key in the dictionary, instead of overwriting them, takes a little care, but there are a few options noted in this post. For example, using append() and extend(). The TLDR is to use extend() when you have multiple values to append, rather than using append() multiple times. E.g.\na = {}\na.setdefault('abc', []).append(1)       # {'abc': [1]}\na.setdefault('abc', []).extend([2, 3])  # a is now {'abc': [1, 2, 3]}\nsetdefault() will avoid a KeyError when we try to access a key that does not exist yet. It inserts the key with the specified default: []\nLet’s put this all together in our initial attempt at solving the anagram problem.\n\nimport logging\nfrom typing import List\n\n\nclass InitialSolution:\n    def __init__(self):\n        # Set up logging config\n        logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')\n        self.logger = logging.getLogger(__name__)\n\n    def groupAnagrams(self, strs: List[str]) -&gt; List[List[str]]:\n        # works fine without the if statement, but let's save some later computation:\n        if strs == [\"\"]:\n            return [[\"\"]]\n        \n        words = {}\n        for word in strs:\n            self.logger.debug(f\"Processing word: {word}\")\n            sorted_word = ''.join(sorted(word))  # n⋅log(n) character sorting * m strings in the list\n            self.logger.debug(f\"Sorted 'word': {sorted_word}\")\n            words.setdefault(sorted_word, []).append(word)\n            self.logger.debug(f\"Updated dict value(s): '{sorted_word}': {words[sorted_word]}\")\n \n        return list(words.values())\n\n\n# Example for testing purposes.\nstrs = [\"act\",\"pots\",\"tops\",\"cat\",\"stop\",\"hat\"]\n# Output: [[\"hat\"],[\"act\", \"cat\"],[\"stop\", \"pots\", \"tops\"]]\n# Note that output order does not matter.\n\nsolution = InitialSolution()\nsolution.groupAnagrams(strs)\n\nDEBUG: Processing word: act\nDEBUG: Sorted 'word': act\nDEBUG: Updated dict value(s): 'act': ['act']\nDEBUG: Processing word: pots\nDEBUG: Sorted 'word': opst\nDEBUG: Updated dict value(s): 'opst': ['pots']\nDEBUG: Processing word: tops\nDEBUG: Sorted 'word': opst\nDEBUG: Updated dict value(s): 'opst': ['pots', 'tops']\nDEBUG: Processing word: cat\nDEBUG: Sorted 'word': act\nDEBUG: Updated dict value(s): 'act': ['act', 'cat']\nDEBUG: Processing word: stop\nDEBUG: Sorted 'word': opst\nDEBUG: Updated dict value(s): 'opst': ['pots', 'tops', 'stop']\nDEBUG: Processing word: hat\nDEBUG: Sorted 'word': aht\nDEBUG: Updated dict value(s): 'aht': ['hat']\n\n\n[['act', 'cat'], ['pots', 'tops', 'stop'], ['hat']]\n\n\nInitial Results:\nIntialSolution passes NeetCode submission (if we comment out the logging).\n\nTime Complexity: O(m⋅n⋅logn) — due to sorting each string.\nSpace Complexity: O(m⋅n) — due to storing the strings in the dictionary keys and values."
   },
   {
-    "objectID": "dsaposts/two-sum-integer/index.html#tests",
-    "href": "dsaposts/two-sum-integer/index.html#tests",
-    "title": "LeetCode 1: Two Integer Sum",
-    "section": "Tests",
-    "text": "Tests\n\ndef test(fn: Callable[[List[int], int], List[int]]) -&gt; None:\n    nums, target = [3, 4, 5, 6], 7\n    output = [0, 1]\n    assert output == fn(nums, target)\n    \n    nums, target = [4, 5, 6], 10\n    output = [0, 2]\n    assert output == fn(nums, target)\n    \n    nums, target = [3, 3], 6\n    output = [0, 1]\n    assert output == fn(nums, target)\n    \n    nums, target = [3, 2, 4], 6\n    output = [1, 2]\n    assert output == fn(nums, target)\n    \n    nums, target = [2, 5, 5, 11], 10\n    output = [1, 2]\n    assert output == fn(nums, target)\n    print('Tests Passed')\n\n\nsolution = BruteForceSolution()\ntest(solution.twoSum)"
-  },
-  {
-    "objectID": "dsaposts/welcome/index.html",
-    "href": "dsaposts/welcome/index.html",
-    "title": "Welcome To Data Structures & Algorithms",
-    "section": "",
-    "text": "Welcome! This is intended to be a repository of my solutions to LeetCode problems."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Home",
-    "section": "",
-    "text": "This is a Quarto website. Work in Progress."
+    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html#neetcode-solution",
+    "href": "dsaposts/group-anagrams/GroupAnagrams.html#neetcode-solution",
+    "title": "LeetCode 49: Group Anagrams",
+    "section": "NeetCode Solution",
+    "text": "NeetCode Solution\n\nfrom collections import defaultdict\n\nclass Solution:\n    def groupAnagrams(self, strs: List[str]) -&gt; List[List[str]]:\n        result = defaultdict(list)\n\n        for s in strs:\n            count = [0] * 26 # one for each character in a-z\n            for c in s:\n                # use ord to get unicode value of the character (minus that of 'a' to zero out 'a'):\n                count[ord(c) - ord('a')] += 1 # update the count for the corresponding character\n            result[tuple(count)].append(s) # convert count list to tuple, as lists can't be dict keys.\n        return result.values()\n\n\nsolution = Solution()\nlist(solution.groupAnagrams(strs)) \n\n[['act', 'cat'], ['pots', 'tops', 'stop'], ['hat']]\n\n\nI used list() above to display the result nicely in the notebook. The code seems to work fine in NeetCode both with and without the conversion to a list; no TypeError is given.\nConclusion:\nNeetcode’s solution uses a hashmap (defaultdict) called result that stores lists of anagrams, where the key is a tuple representing the character counts of the strings. Note that a defaultdict never raises a KeyError, but instead provides a default value for a key that does not exist.\n\nTime complexity O(m⋅n) — where m is the total number of strings and n is the length of each string (multiplied by 26 possible letters)\nSpace Complexity: O(m⋅n) — due to the space needed for storing the strings in the defaultdict values.\n\nGiven an extremely long string, the above solution would be optimal: O(m⋅n⋅logn) vs. O(m⋅n⋅26)"
   },
   {
     "objectID": "dsaposts/contains-duplicate/index.html",
@@ -133,39 +119,95 @@
     "text": "NeetCode Solution\nThe following code makes it clear that we are using a hashset to store the values. It does not create the entire set all at once (like we do above, always giving O(n) time complexity as it runs through the whole list). Instead, it goes step by step; thus only in the worst case would this be O(n). We must create the hashset, which in the worst case uses O(n) space.\n\nclass Solution:\n    def hasDuplicate(self, nums: List[int]) -&gt; bool:\n        hashset = set()\n        for n in nums:\n            if n in hashset:\n                return True\n            hashset.add(n)\n        return False\n\n\nsolution = Solution()\nprint(solution.hasDuplicate(nums1))\nprint(solution.hasDuplicate(nums2))\n\nConclusion:\nAn easy start to NeetCode problems. The solution has a worst-case complexity of:\n\nTime complexity: O(n)\nSpace complexity: O(n)"
   },
   {
-    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html",
-    "href": "dsaposts/group-anagrams/GroupAnagrams.html",
-    "title": "LeetCode 49: Group Anagrams",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
     "section": "",
-    "text": "Difficulty: Medium\nGiven an array of strings strs, group all anagrams together into sublists. You may return the output in any order.\nExample 1:\nInput: strs = [\"act\",\"pots\",\"tops\",\"cat\",\"stop\",\"hat\"]\nOutput: [[\"hat\"],[\"act\", \"cat\"],[\"stop\", \"pots\", \"tops\"]]\nExample 2:\nInput: strs = [\"x\"]\nOutput: [[\"x\"]]\nExample 3:\nInput: strs = [\"\"]\nOutput: [[\"\"]]"
+    "text": "This is a Quarto website. Work in Progress."
   },
   {
-    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html#problem-description",
-    "href": "dsaposts/group-anagrams/GroupAnagrams.html#problem-description",
-    "title": "LeetCode 49: Group Anagrams",
+    "objectID": "dsaposts/welcome/index.html",
+    "href": "dsaposts/welcome/index.html",
+    "title": "Welcome To Data Structures & Algorithms",
     "section": "",
-    "text": "Difficulty: Medium\nGiven an array of strings strs, group all anagrams together into sublists. You may return the output in any order.\nExample 1:\nInput: strs = [\"act\",\"pots\",\"tops\",\"cat\",\"stop\",\"hat\"]\nOutput: [[\"hat\"],[\"act\", \"cat\"],[\"stop\", \"pots\", \"tops\"]]\nExample 2:\nInput: strs = [\"x\"]\nOutput: [[\"x\"]]\nExample 3:\nInput: strs = [\"\"]\nOutput: [[\"\"]]"
+    "text": "Welcome! This is intended to be a repository of my solutions to LeetCode problems."
   },
   {
-    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html#initial-solution",
-    "href": "dsaposts/group-anagrams/GroupAnagrams.html#initial-solution",
-    "title": "LeetCode 49: Group Anagrams",
+    "objectID": "dsaposts/two-sum-integer/index.html",
+    "href": "dsaposts/two-sum-integer/index.html",
+    "title": "LeetCode 1: Two Integer Sum",
+    "section": "",
+    "text": "Difficulty: Easy\nGiven an array of integers nums and an integer target, return the indices i and j such that nums[i] + nums[j] == target and i != j.\nAssume that every input has exactly one pair of indices i and j that satisfy the condition.\nReturn the answer with the smaller index first.\nExample:\nInput: \nnums = [3,4,5,6], target = 7\nOutput: [0,1]\n# Explanation: nums[0] + nums[1] == 7, so we return [0, 1].\nAdditional examples are provided in the tests below."
+  },
+  {
+    "objectID": "dsaposts/two-sum-integer/index.html#problem-description",
+    "href": "dsaposts/two-sum-integer/index.html#problem-description",
+    "title": "LeetCode 1: Two Integer Sum",
+    "section": "",
+    "text": "Difficulty: Easy\nGiven an array of integers nums and an integer target, return the indices i and j such that nums[i] + nums[j] == target and i != j.\nAssume that every input has exactly one pair of indices i and j that satisfy the condition.\nReturn the answer with the smaller index first.\nExample:\nInput: \nnums = [3,4,5,6], target = 7\nOutput: [0,1]\n# Explanation: nums[0] + nums[1] == 7, so we return [0, 1].\nAdditional examples are provided in the tests below."
+  },
+  {
+    "objectID": "dsaposts/two-sum-integer/index.html#initial-solution",
+    "href": "dsaposts/two-sum-integer/index.html#initial-solution",
+    "title": "LeetCode 1: Two Integer Sum",
     "section": "Initial Solution",
-    "text": "Initial Solution\nThe key to this problem was to recognize that when anagrams are sorted alphabetically, they become the same ‘word’. With that in mind, a decent solution seemed relatively easy to come up with. Let’s just sort the words and place the original word in a dictionary with the keys being the unique sorted/garbled word.\nThere are a few parts that could potentially trip up a beginner:\nFirstly, calling sorted() on a string returns a list of the sorted characters and not a whole sorted word:\nword = 'hello'\nsorted_word = sorted(word)\nprint(sorted_word)\n&gt;&gt;&gt; ['e', 'h', 'l', 'l', 'o']\nSo we must join() the list back together afterwards.\nSecondly, adding values to a pre-existing key in the dictionary, instead of overwriting them, takes a little care, but there are a few options noted in this post. For example, using append() and extend(). The TLDR is to use extend() when you have multiple values to append, rather than using append() multiple times. E.g.\na = {}\na.setdefault('abc', []).append(1)       # {'abc': [1]}\na.setdefault('abc', []).extend([2, 3])  # a is now {'abc': [1, 2, 3]}\nsetdefault() will avoid a KeyError when we try to access a key that does not exist yet. It inserts the key with the specified default: []\nLet’s put this all together in our initial attempt at solving the anagram problem.\n\nimport logging\nfrom typing import List\n\n\nclass InitialSolution:\n    def __init__(self):\n        # Set up logging config\n        logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')\n        self.logger = logging.getLogger(__name__)\n\n    def groupAnagrams(self, strs: List[str]) -&gt; List[List[str]]:\n        # works fine without the if statement, but let's save some later computation:\n        if strs == [\"\"]:\n            return [[\"\"]]\n        \n        words = {}\n        for word in strs:\n            self.logger.debug(f\"Processing word: {word}\")\n            sorted_word = ''.join(sorted(word))  # n⋅log(n) character sorting * m strings in the list\n            self.logger.debug(f\"Sorted 'word': {sorted_word}\")\n            words.setdefault(sorted_word, []).append(word)\n            self.logger.debug(f\"Updated dict value(s): '{sorted_word}': {words[sorted_word]}\")\n \n        return list(words.values())\n\n\n# Example for testing purposes.\nstrs = [\"act\",\"pots\",\"tops\",\"cat\",\"stop\",\"hat\"]\n# Output: [[\"hat\"],[\"act\", \"cat\"],[\"stop\", \"pots\", \"tops\"]]\n# Note that output order does not matter.\n\nsolution = InitialSolution()\nsolution.groupAnagrams(strs)\n\nDEBUG: Processing word: act\nDEBUG: Sorted 'word': act\nDEBUG: Updated dict value(s): 'act': ['act']\nDEBUG: Processing word: pots\nDEBUG: Sorted 'word': opst\nDEBUG: Updated dict value(s): 'opst': ['pots']\nDEBUG: Processing word: tops\nDEBUG: Sorted 'word': opst\nDEBUG: Updated dict value(s): 'opst': ['pots', 'tops']\nDEBUG: Processing word: cat\nDEBUG: Sorted 'word': act\nDEBUG: Updated dict value(s): 'act': ['act', 'cat']\nDEBUG: Processing word: stop\nDEBUG: Sorted 'word': opst\nDEBUG: Updated dict value(s): 'opst': ['pots', 'tops', 'stop']\nDEBUG: Processing word: hat\nDEBUG: Sorted 'word': aht\nDEBUG: Updated dict value(s): 'aht': ['hat']\n\n\n[['act', 'cat'], ['pots', 'tops', 'stop'], ['hat']]\n\n\nInitial Results:\nIntialSolution passes NeetCode submission (if we comment out the logging).\n\nTime Complexity: O(m⋅n⋅logn) — due to sorting each string.\nSpace Complexity: O(m⋅n) — due to storing the strings in the dictionary keys and values."
+    "text": "Initial Solution\n\nfrom typing import List, Callable\n\n\nclass InitialSolution:\n    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:\n        for i, i_num in enumerate(nums):\n            for j, j_num in enumerate(nums[1:]): \n                if i_num + j_num == target and i != j+1: # must 'and' to ensure i != j \n                    return [i,j+1]\n        return [] # not really needed as we are told a solution exists\n\nNote: I first tried to ensure i != j by starting the for j loop at [1:] instead of 0. This failed the following case, which led me to add the and operator in the equality check, at which point it was apparent the slicing was unnecessary. Careful reading of the question indicates that the indices are not allowed to be equal, but there is no restriction on the numbers being equal.\nnums = [2,5,5,11]\ntarget = 10\noutput = [1,2]\nLet’s clean up the function:\n\nclass BruteForceSolution:\n    def twoSum(self, nums: List[int], target: int) -&gt; List[int]:\n        for i, i_num in enumerate(nums):\n            for j, j_num in enumerate(nums): \n                if i_num + j_num == target and i != j:\n                    return [i,j]\n        return []\n\n\n# Examples for testing purposes.\n#nums, target = [3,4,5,6], 7 # output [0,1]\n#nums, target = [4,5,6], 10 # output [0,2]\n#nums, target = [3,3], 6 # output [0,1] \n#nums, target = [3,2,4], 6 # output [1,2]\nnums, target = [2,5,5,11], 10 # output [1,2] # tricky\n\n#solution = InitialSolution()\nsolution = BruteForceSolution()\nsolution.twoSum(nums, target)\n\nInitial Results:\nBruteForceSolution passes NeetCode submission.\n\nTime Complexity: O(n)*O(n) = O(n2)"
   },
   {
-    "objectID": "dsaposts/group-anagrams/GroupAnagrams.html#neetcode-solution",
-    "href": "dsaposts/group-anagrams/GroupAnagrams.html#neetcode-solution",
-    "title": "LeetCode 49: Group Anagrams",
+    "objectID": "dsaposts/two-sum-integer/index.html#tests",
+    "href": "dsaposts/two-sum-integer/index.html#tests",
+    "title": "LeetCode 1: Two Integer Sum",
+    "section": "Tests",
+    "text": "Tests\n\ndef test(fn: Callable[[List[int], int], List[int]]) -&gt; None:\n    nums, target = [3, 4, 5, 6], 7\n    output = [0, 1]\n    assert output == fn(nums, target)\n    \n    nums, target = [4, 5, 6], 10\n    output = [0, 2]\n    assert output == fn(nums, target)\n    \n    nums, target = [3, 3], 6\n    output = [0, 1]\n    assert output == fn(nums, target)\n    \n    nums, target = [3, 2, 4], 6\n    output = [1, 2]\n    assert output == fn(nums, target)\n    \n    nums, target = [2, 5, 5, 11], 10\n    output = [1, 2]\n    assert output == fn(nums, target)\n    print('Tests Passed')\n\n\nsolution = BruteForceSolution()\ntest(solution.twoSum)"
+  },
+  {
+    "objectID": "dsaposts/top-k-elements/TopKElementsinList.html",
+    "href": "dsaposts/top-k-elements/TopKElementsinList.html",
+    "title": "LeetCode 347: Top K Frequent Elements",
+    "section": "",
+    "text": "Difficulty: Medium\nGiven an integer array nums and an integer k, return the k most frequent elements within the array.\nThe test cases are generated such that the answer is always unique.\nYou may return the output in any order.\nExample 1:\nInput: nums = [1,2,2,3,3,3], k = 2\nOutput: [2,3]\nExample 2:\nInput: nums = [7,7], k = 1\nOutput: [7]"
+  },
+  {
+    "objectID": "dsaposts/top-k-elements/TopKElementsinList.html#problem-description",
+    "href": "dsaposts/top-k-elements/TopKElementsinList.html#problem-description",
+    "title": "LeetCode 347: Top K Frequent Elements",
+    "section": "",
+    "text": "Difficulty: Medium\nGiven an integer array nums and an integer k, return the k most frequent elements within the array.\nThe test cases are generated such that the answer is always unique.\nYou may return the output in any order.\nExample 1:\nInput: nums = [1,2,2,3,3,3], k = 2\nOutput: [2,3]\nExample 2:\nInput: nums = [7,7], k = 1\nOutput: [7]"
+  },
+  {
+    "objectID": "dsaposts/top-k-elements/TopKElementsinList.html#initial-solution",
+    "href": "dsaposts/top-k-elements/TopKElementsinList.html#initial-solution",
+    "title": "LeetCode 347: Top K Frequent Elements",
+    "section": "Initial Solution",
+    "text": "Initial Solution\nMy first thought on seeing this is that it’s such a common problem that no doubt someone has already written an efficient topK algorithm. Pandas has an nlargest() function, maybe that would work? (not without some wrangling). Therefore, I decided I’d make a super simple algorithm without using any external libraries or googling for helpful functions.\nAfter completing the exercise, I learned that heapq.nlargest() is probably that helpful function you’re looking for, e.g., as shown below in the ‘two-liner’ solution below. However, the most efficient answer is really nice, with O(n) time. We’ll see later…\n\n# imports for the initial attempt\nimport logging\nfrom typing import List, Callable\nfrom collections import defaultdict\n\n# imports for the two-liner solution mentioned above\nfrom collections import Counter\nimport heapq\n\n\n# Set up logging config (global scope)\nlogging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')\nlogger = logging.getLogger(__name__)\n\n\nclass InitialSolution:\n    def __init__(self):\n        self.logger = logger\n    \n    def topKFrequent(self, nums: List[int], k: int) -&gt; List[int]:\n        count_dict = defaultdict(int) \n        self.logger.debug(f\"dict at initilization: {dict(count_dict)}\")\n        for num in nums:\n            count_dict[num] += 1\n            self.logger.debug(f\"dict updated: {dict(count_dict)}\")\n        \n        top_k_keys = []\n        for _ in range(k):\n            highest_freq = -1\n            most_freq_key = None  # Could use max() to determine this instead.\n            for key, freq in count_dict.items(): # nested loop results in O(k⋅n) time\n                if freq &gt; highest_freq:\n                    most_freq_key = key\n                    highest_freq = freq\n            self.logger.debug(f\"most frequent key: {most_freq_key}, frequency: {highest_freq}\")\n            top_k_keys.append(most_freq_key)\n            count_dict.pop(most_freq_key)\n            self.logger.debug(f\"popped off most frequent and updated dict: {dict(count_dict)}\")\n            self.logger.debug(f\"current top k: {top_k_keys}\")\n\n        return top_k_keys\n    \n    # Second attempt added here for testing:\n    def topKTwoLiner(self, nums: List[int], k: int) -&gt; List[int]:\n        count = Counter(nums)\n        return heapq.nlargest(k, count, key=count.get)\n\n\n# Example for testing purposes. Order of output does not matter.\nnums, k = [1,2,2,3,3,3], 2 # Output: [2,3]\nsolution = InitialSolution()\nlogger.setLevel(logging.DEBUG)\nsolution.topKFrequent(nums,k)"
+  },
+  {
+    "objectID": "dsaposts/top-k-elements/TopKElementsinList.html#tests",
+    "href": "dsaposts/top-k-elements/TopKElementsinList.html#tests",
+    "title": "LeetCode 347: Top K Frequent Elements",
+    "section": "Tests",
+    "text": "Tests\n\ndef test(fn: Callable[[List[int], int], List[int]]) -&gt; None:\n    test_cases = [\n        # [nums], k, [expected]\n        ([1, 2, 2, 3, 3, 3], 2, [2, 3]),\n        ([1, 1, 1, 2, 2, 3], 2, [1, 2]),\n        ([-1, -1, -1, 2, 2, 3], 2, [-1, 2]),\n        ([7, 7], 1, [7]),  \n        ([4, 4, 4, 6, 6, 2, 2, 2], 2, [4, 2]),  \n        ([5, 5, 5, 1, 1, 1, 3, 3, 3, 2, 2, 2], 3, [5, 1, 3]),\n    ]\n   \n    # Set logging level to suppress debug output during tests\n    logger.setLevel(logging.WARNING)\n    \n    for nums, k, expected in test_cases:\n        output = fn(nums, k)\n        assert set(output) == set(expected), f\"Test failed for nums={nums}, k={k}. Expected {expected}, but got {output}\"\n        # set() ensures that the comparison is order independent\n    \n    print('Tests Passed')\n\n\n# Set logging level suppress debug output during tests\nlogger.setLevel(logging.WARNING)\n\nsolution = InitialSolution()\ntest(solution.topKFrequent)\ntest(solution.topKTwoLiner)"
+  },
+  {
+    "objectID": "dsaposts/top-k-elements/TopKElementsinList.html#initial-results",
+    "href": "dsaposts/top-k-elements/TopKElementsinList.html#initial-results",
+    "title": "LeetCode 347: Top K Frequent Elements",
+    "section": "Initial Results",
+    "text": "Initial Results\nMy intial solution passed the LeetCode/NeetCode submission. However, the runtime was super slow and beats only 6% of entries, although top 94% for memory.\nWe could speed it up a little by using Python’s in-built max() function to find the most frequent key, but we’d be better off with a different approach. For example, by sorting the dictionary and slicing off the top k elements of the sorted dictionary.\nThe solution has the following worst-case complexity:\n\nTime complexity: O(n + k⋅n); if k = n this becomes O(n*2).\nSpace complexity: O(n) comprising O(n) for the dictionary plus O(k) to store the list of top k elements."
+  },
+  {
+    "objectID": "dsaposts/top-k-elements/TopKElementsinList.html#neetcode-solution",
+    "href": "dsaposts/top-k-elements/TopKElementsinList.html#neetcode-solution",
+    "title": "LeetCode 347: Top K Frequent Elements",
     "section": "NeetCode Solution",
-    "text": "NeetCode Solution\n\nfrom collections import defaultdict\n\nclass Solution:\n    def groupAnagrams(self, strs: List[str]) -&gt; List[List[str]]:\n        result = defaultdict(list)\n\n        for s in strs:\n            count = [0] * 26 # one for each character in a-z\n            for c in s:\n                # use ord to get unicode value of the character (minus that of 'a' to zero out 'a'):\n                count[ord(c) - ord('a')] += 1 # update the count for the corresponding character\n            result[tuple(count)].append(s) # convert count list to tuple, as lists can't be dict keys.\n        return result.values()\n\n\nsolution = Solution()\nlist(solution.groupAnagrams(strs)) \n\n[['act', 'cat'], ['pots', 'tops', 'stop'], ['hat']]\n\n\nI used list() above to display the result nicely in the notebook. The code seems to work fine in NeetCode both with and without the conversion to a list; no TypeError is given.\nConclusion:\nNeetcode’s solution uses a hashmap (defaultdict) called result that stores lists of anagrams, where the key is a tuple representing the character counts of the strings. Note that a defaultdict never raises a KeyError, but instead provides a default value for a key that does not exist.\n\nTime complexity O(m⋅n) — where m is the total number of strings and n is the length of each string (multiplied by 26 possible letters)\nSpace Complexity: O(m⋅n) — due to the space needed for storing the strings in the defaultdict values.\n\nGiven an extremely long string, the above solution would be optimal: O(m⋅n⋅logn) vs. O(m⋅n⋅26)"
+    "text": "NeetCode Solution\n\nclass Solution:\n    def topKFrequent(self, nums: List[int], k: int) -&gt; List[int]:\n        count = {}\n        freq = [[] for i in range(len(nums) + 1)]\n\n        for n in nums:\n            count[n] = 1 + count.get(n, 0)\n        for n, c in count.items():\n            freq[c].append(n)\n\n        res = []\n        for i in range(len(freq) - 1, 0, -1):\n            for n in freq[i]:\n                res.append(n)\n                if len(res) == k:\n                    return res                    \n\n\nsolution = Solution()\ntest(solution.topKFrequent)\n\nConclusion:\nNeetcode’s solution is very nice. The key insight is the use of bucket sort, which allows it to avoid typical O(n⋅log n) sorting and instead achieves linear time complexity. Note that freq has a length of len(nums) + 1, to accommodate frequencies from 0 to the maximum possible frequency (which is at most the length of the input). By using the frequency as an index into the freq list, it creates a natural ordering of elements by their frequencies without explicit sorting.\n\nTime complexity: O(n)\nSpace complexity: O(n) comprising O(n + n + k)"
   },
   {
     "objectID": "dsa.html",
     "href": "dsa.html",
     "title": "LeetCode",
     "section": "",
-    "text": "Data Structures & Algorithms\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLeetCode 49: Group Anagrams\n\n\n\n\n\n\ncode\n\n\narrays and hashing\n\n\nmedium\n\n\n\n\n\n\n\n\n\nJun 3, 2024\n\n\nspa-dev\n\n\n\n\n\n\n\n\n\n\n\n\nLeetCode 217: Contains Duplicate\n\n\n\n\n\n\ncode\n\n\narrays and hashing\n\n\neasy\n\n\n\n\n\n\n\n\n\nMay 28, 2024\n\n\nspa-dev\n\n\n\n\n\n\n\n\n\n\n\n\nLeetCode 1: Two Integer Sum\n\n\n\n\n\n\ncode\n\n\narrays and hashing\n\n\neasy\n\n\n\n\n\n\n\n\n\nMay 27, 2024\n\n\nspa-dev\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To Data Structures & Algorithms\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nMay 26, 2024\n\n\nspa-dev\n\n\n\n\n\n\nNo matching items"
+    "text": "Data Structures & Algorithms\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLeetCode 347: Top K Frequent Elements\n\n\n\n\n\n\ncode\n\n\narrays and hashing\n\n\nmedium\n\n\n\n\n\n\n\n\n\nJun 10, 2024\n\n\nspa-dev\n\n\n\n\n\n\n\n\n\n\n\n\nLeetCode 49: Group Anagrams\n\n\n\n\n\n\ncode\n\n\narrays and hashing\n\n\nmedium\n\n\n\n\n\n\n\n\n\nJun 3, 2024\n\n\nspa-dev\n\n\n\n\n\n\n\n\n\n\n\n\nLeetCode 217: Contains Duplicate\n\n\n\n\n\n\ncode\n\n\narrays and hashing\n\n\neasy\n\n\n\n\n\n\n\n\n\nMay 28, 2024\n\n\nspa-dev\n\n\n\n\n\n\n\n\n\n\n\n\nLeetCode 1: Two Integer Sum\n\n\n\n\n\n\ncode\n\n\narrays and hashing\n\n\neasy\n\n\n\n\n\n\n\n\n\nMay 27, 2024\n\n\nspa-dev\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To Data Structures & Algorithms\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nMay 26, 2024\n\n\nspa-dev\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "fastai/fastai-P2L12/fastai-P2L12-meanshift.html",
