@@ -220,7 +220,7 @@ Output: [7]</code></pre>
 <section id="initial-solution" class="level2">
 <h2 class="anchored" data-anchor-id="initial-solution">Initial Solution</h2>
 <p>My first thought on seeing this is that it’s such a common problem that no doubt someone has already written an efficient topK algorithm. Pandas has an <code>nlargest()</code> function, maybe that would work? (not without some wrangling). Therefore, I decided I’d make a super simple algorithm without using any external libraries or googling for helpful functions.</p>
-<p>After completing the exercise, I learned that <code>heapq.nlargest()</code> is probably that helpful function you’re looking for, e.g., as shown below in the ‘two-liner’ solution below. However, the most efficient answer is really nice, with O(n) time. We’ll see later…</p>
+<p>After completing the exercise, I learned that <code>heapq.nlargest()</code> is probably that helpful function you’re looking for, e.g., as shown in the ‘two-liner’ solution below. However, the most efficient answer is really nice, with O(n) time. We’ll see later…</p>
 <div id="19bce42e-b7a5-4598-be48-e881d18f333e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># imports for the initial attempt</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
