@@ -9811,7 +9811,7 @@ clusters variable = [[3, 4, 5], [0, 1, 2]]</code></pre>
 </div>
 <div id="cell-150" class="cell" data-execution_count="101">
 <div class="sourceCode cell-code" id="cb156"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dist_batch(points, centroids):</span>
-<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Same defined function defined above.</span></span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Same as function defined above.</span></span>
 <span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.cdist(points, centroids) <span class="co"># L2 norm by default (p=2.0) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-151" class="cell" data-execution_count="102">

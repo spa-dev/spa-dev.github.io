@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="spa-dev">
-<meta name="dcterms.date" content="2024-05-27">
+<meta name="dcterms.date" content="2024-06-17">
 
-<title>spa-dev - LeetCode 1: Two Integer Sum</title>
+<title>spa-dev - LeetCode 271: String Encode and Decode</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -103,6 +103,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -151,11 +180,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">LeetCode 1: Two Integer Sum</h1>
+      <h1 class="title">LeetCode 271: String Encode and Decode</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
                 <div class="quarto-category">arrays and hashing</div>
-                <div class="quarto-category">easy</div>
+                <div class="quarto-category">medium</div>
               </div>
                   </div>
   </div>
@@ -173,7 +202,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 27, 2024</p>
+        <p class="date">June 17, 2024</p>
       </div>
     </div>
     
@@ -191,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#problem-description" id="toc-problem-description" class="nav-link active" data-scroll-target="#problem-description">Problem Description</a></li>
   <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a></li>
-  <li><a href="#tests" id="toc-tests" class="nav-link" data-scroll-target="#tests">Tests</a></li>
+  <li><a href="#initial-results" id="toc-initial-results" class="nav-link" data-scroll-target="#initial-results">Initial Results</a></li>
   <li><a href="#neetcode-solution" id="toc-neetcode-solution" class="nav-link" data-scroll-target="#neetcode-solution">NeetCode Solution</a></li>
   </ul>
 </nav>
@@ -205,115 +234,173 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
-<p>Difficulty: <span style="color:green"><strong>Easy</strong></span></p>
-<p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return the indices <code>i</code> and <code>j</code> such that <code>nums[i] + nums[j] == target</code> and <code>i != j</code>.</p>
-<p>Assume that every input has exactly one pair of indices <code>i</code> and <code>j</code> that satisfy the condition.</p>
-<p>Return the answer with the smaller index first.</p>
-<p><strong>Example:</strong></p>
-<pre><code>Input: 
-nums = [3,4,5,6], target = 7
-Output: [0,1]
-# Explanation: nums[0] + nums[1] == 7, so we return [0, 1].</code></pre>
-<p>Additional examples are provided in the tests below.</p>
+<p>Difficulty: <span style="color:orange"><strong>Medium</strong></span></p>
+<p>Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded back to the original list of strings.</p>
+<p>Please implement <code>encode</code> and <code>decode</code></p>
+<p><strong>Example 1:</strong></p>
+<pre><code>Input: ["neet","code","love","you"]
+Output:["neet","code","love","you"]</code></pre>
+<p><strong>Example 2:</strong></p>
+<pre><code>Input: ["we","say",":","yes"]
+Output: ["we","say",":","yes"]</code></pre>
+<p><strong>Constraints:</strong></p>
+<pre><code>0 &lt;= strs.length &lt; 100
+0 &lt;= strs[i].length &lt; 200
+strs[i] contains only UTF-8 characters.</code></pre>
 </section>
 <section id="initial-solution" class="level2">
 <h2 class="anchored" data-anchor-id="initial-solution">Initial Solution</h2>
-<div id="32cea06f" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List, Callable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Not sure why this was classed as medium. Am I missing something here? (Apparently so). I chose to use a new line <code>"\n"</code> as the delimiter between words, and the submission passed on NeetCode. I’m not sure it would on LeetCode, but it’s a premium problem there, so not free to check.</p>
+<div id="19bce42e-b7a5-4598-be48-e881d18f333e" class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="28774312" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> twoSum(<span class="va">self</span>, nums: List[<span class="bu">int</span>], target: <span class="bu">int</span>) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, i_num <span class="kw">in</span> <span class="bu">enumerate</span>(nums):</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j, j_num <span class="kw">in</span> <span class="bu">enumerate</span>(nums[<span class="dv">1</span>:]): </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i_num <span class="op">+</span> j_num <span class="op">==</span> target <span class="kw">and</span> i <span class="op">!=</span> j<span class="op">+</span><span class="dv">1</span>: <span class="co"># must 'and' to ensure i != j </span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">return</span> [i,j<span class="op">+</span><span class="dv">1</span>]</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [] <span class="co"># not really needed as we are told a solution exists</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="65bfbbd0-7de2-4c87-8941-5504bc195799" class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up logging config (global scope)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(level<span class="op">=</span>logging.WARNING, <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(levelname)s</span><span class="st">: </span><span class="sc">%(message)s</span><span class="st">"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Note: I first tried to ensure <code>i != j</code> by starting the <code>for j</code> loop at <code>[1:]</code> instead of 0. This failed the following case, which led me to add the <code>and</code> operator in the equality check, at which point it was apparent the slicing was unnecessary. Careful reading of the question indicates that the indices are not allowed to be equal, but there is no restriction on the numbers being equal.</p>
-<pre><code>nums = [2,5,5,11]
-target = 10
-output = [1,2]</code></pre>
-<p>Let’s clean up the function:</p>
-<div id="6c478d48" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BruteForceSolution:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> twoSum(<span class="va">self</span>, nums: List[<span class="bu">int</span>], target: <span class="bu">int</span>) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, i_num <span class="kw">in</span> <span class="bu">enumerate</span>(nums):</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j, j_num <span class="kw">in</span> <span class="bu">enumerate</span>(nums): </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i_num <span class="op">+</span> j_num <span class="op">==</span> target <span class="kw">and</span> i <span class="op">!=</span> j:</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">return</span> [i,j]</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> []</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="1bb5c8cb-8321-45dd-b33f-4afd59980453" class="cell" data-execution_count="80">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.logger <span class="op">=</span> logger</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode(<span class="va">self</span>, strs: List[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        encoded <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> string <span class="kw">in</span> strs:</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            encoded <span class="op">+=</span> string <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(<span class="ss">f"encoded string: </span><span class="sc">{</span>encoded<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> encoded</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decode(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> List[<span class="bu">str</span>]:</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        decoded <span class="op">=</span> []</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        word <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> letter <span class="kw">in</span> s:</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>            word <span class="op">+=</span> letter</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(<span class="ss">f"added letter to word; word = </span><span class="sc">{</span>word<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> letter <span class="op">==</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>:</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                decoded.append(word[<span class="dv">0</span>:<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.logger.debug(<span class="ss">f"added word to final list: </span><span class="sc">{</span>decoded<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>                word <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> decoded</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="f06c19c6" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examples for testing purposes.</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#nums, target = [3,4,5,6], 7 # output [0,1]</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#nums, target = [4,5,6], 10 # output [0,2]</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#nums, target = [3,3], 6 # output [0,1] </span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#nums, target = [3,2,4], 6 # output [1,2]</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>nums, target <span class="op">=</span> [<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">11</span>], <span class="dv">10</span> <span class="co"># output [1,2] # tricky</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#solution = InitialSolution()</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> BruteForceSolution()</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>solution.twoSum(nums, target)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="acbc05b5-df29-4607-a653-32b316e16690" class="cell" data-execution_count="81">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>strs <span class="op">=</span> [<span class="st">"neet"</span>, <span class="st">"code"</span>, <span class="st">"love"</span>, <span class="st">"you"</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected output:["neet","code","love","you"]</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> InitialSolution()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># suppress debugging output to avoid the mess when using '/n'</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>logger.setLevel(logging.WARNING)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>string <span class="op">=</span> solution.encode(strs)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>string</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="81">
+<pre><code>'neet\ncode\nlove\nyou\n'</code></pre>
 </div>
-<p><strong>Initial Results:</strong></p>
-<p>BruteForceSolution passes NeetCode submission.</p>
-<ul>
-<li>Time Complexity: O(n)*O(n) = O(n<sup>2</sup>)</li>
-</ul>
+</div>
+<div id="6b667d73-eb53-4ed0-8962-7b8509134b4a" class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>logger.setLevel(logging.DEBUG)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>solution.decode(string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>DEBUG: added letter to word; word = n
+DEBUG: added letter to word; word = ne
+DEBUG: added letter to word; word = nee
+DEBUG: added letter to word; word = neet
+DEBUG: added letter to word; word = neet
+
+DEBUG: added word to final list: ['neet']
+DEBUG: added letter to word; word = c
+DEBUG: added letter to word; word = co
+DEBUG: added letter to word; word = cod
+DEBUG: added letter to word; word = code
+DEBUG: added letter to word; word = code
+
+DEBUG: added word to final list: ['neet', 'code']
+DEBUG: added letter to word; word = l
+DEBUG: added letter to word; word = lo
+DEBUG: added letter to word; word = lov
+DEBUG: added letter to word; word = love
+DEBUG: added letter to word; word = love
+
+DEBUG: added word to final list: ['neet', 'code', 'love']
+DEBUG: added letter to word; word = y
+DEBUG: added letter to word; word = yo
+DEBUG: added letter to word; word = you
+DEBUG: added letter to word; word = you
+
+DEBUG: added word to final list: ['neet', 'code', 'love', 'you']</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="82">
+<pre><code>['neet', 'code', 'love', 'you']</code></pre>
+</div>
+</div>
+<p>Here’s a cleaner version that has the same approach. A few <code>if</code> statements are needed to account for edge cases on LeetCode. However, these cause an inconsistency between the type hints in the function definition and the actual type of the variables. The encode function now returns <code>Union[List[str], str]</code> rather than the original <code>str</code>. Not sure if that would be acceptable either.</p>
+<div id="fc1f2bc0-010b-4fcb-a8d1-a32437a0668e" class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AlternativeSolution:</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode(<span class="va">self</span>, strs: List[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">str</span>:  <span class="co"># incorrect type annotation</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> strs <span class="op">==</span> [<span class="st">""</span>]:</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> [<span class="st">""</span>]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> strs <span class="op">==</span> []:</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> []</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(strs)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decode(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> List[<span class="bu">str</span>]:  <span class="co"># incorrect type annotation</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> s <span class="op">==</span> [<span class="st">""</span>]:</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> [<span class="st">""</span>]</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> s <span class="op">==</span> []:</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> []</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> s.split(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="tests" class="level2">
-<h2 class="anchored" data-anchor-id="tests">Tests</h2>
-<div id="14de48f5" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test(fn: Callable[[List[<span class="bu">int</span>], <span class="bu">int</span>], List[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    nums, target <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], <span class="dv">7</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output <span class="op">==</span> fn(nums, target)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    nums, target <span class="op">=</span> [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], <span class="dv">10</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">2</span>]</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output <span class="op">==</span> fn(nums, target)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    nums, target <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">3</span>], <span class="dv">6</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output <span class="op">==</span> fn(nums, target)</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    nums, target <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>], <span class="dv">6</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output <span class="op">==</span> fn(nums, target)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    nums, target <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">11</span>], <span class="dv">10</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> output <span class="op">==</span> fn(nums, target)</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Tests Passed'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="ffc8afec" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> BruteForceSolution()</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>test(solution.twoSum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="initial-results" class="level2">
+<h2 class="anchored" data-anchor-id="initial-results">Initial Results</h2>
+<p>My intial solution passed the LeetCode submission. I had a little trouble determining the worst-case complexity here. It appears that the intial <code>encode</code> function may be <span class="math inline">\(O(n^2)\)</span> due to the repeated cost of string concatenation*. The alternative solution may avoid the quadratic time by using use Python’s better optimized <code>join</code> operation.</p>
+<p>*Per this <a href="https://wiki.python.org/moin/PythonSpeed">source</a>:</p>
+<blockquote class="blockquote">
+<p>String concatenation is best done with ’‘.join(seq) which is an <span class="math inline">\(O(n)\)</span> process. In contrast, using the’+’ or ‘+=’ operators can result in an <span class="math inline">\(O(n^2)\)</span> process because new strings may be built for each intermediate step. The CPython 2.4 interpreter mitigates this issue somewhat; however, ’’.join(seq) remains the best practice.</p>
+</blockquote>
+<p>The <code>decode</code> function appears to be <span class="math inline">\(O(n)\)</span> due to the linear nature of processing each character exactly once.</p>
 </section>
-<section id="neetcode-solution" class="level1">
-<h1>NeetCode Solution</h1>
-<div id="9333d147" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> twoSum(<span class="va">self</span>, nums: List[<span class="bu">int</span>], target: <span class="bu">int</span>) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        prevMap <span class="op">=</span> {}  <span class="co"># val -&gt; index</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(nums):</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            diff <span class="op">=</span> target <span class="op">-</span> n</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> diff <span class="kw">in</span> prevMap:</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> [prevMap[diff], i]</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            prevMap[n] <span class="op">=</span> i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="45c6dcd3" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>test(solution.twoSum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="neetcode-solution" class="level2">
+<h2 class="anchored" data-anchor-id="neetcode-solution">NeetCode Solution</h2>
+<div id="9707123a-60f2-4eb4-9b36-49c4906944c7" class="cell" data-execution_count="84">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode(<span class="va">self</span>, strs: List[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> s <span class="kw">in</span> strs:</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>            res <span class="op">+=</span> <span class="bu">str</span>(<span class="bu">len</span>(s)) <span class="op">+</span> <span class="st">"#"</span> <span class="op">+</span> s</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> decode(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> List[<span class="bu">str</span>]:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> []</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> i <span class="op">&lt;</span> <span class="bu">len</span>(s):</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>            j <span class="op">=</span> i</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> s[j] <span class="op">!=</span> <span class="st">"#"</span>:</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>                j <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>            length <span class="op">=</span> <span class="bu">int</span>(s[i:j])</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> j <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>            j <span class="op">=</span> i <span class="op">+</span> length</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>            res.append(s[i:j])</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> j</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Conclusion:</strong></p>
-<p>The above code represents a more optimal solution. It uses a hashmap (dictionary) called <code>prevMap</code> that stores previously encountered numbers as keys with their corresponding indices as values. Here <code>prevMap</code> acts as a lookup table to quickly check if the complement of the current number (i.e., the number needed to reach the target) has been seen before. This method has a time complexity of O(n) because it processes each element of the list once only. A little extra memory is needed, since we have to create the lookup table.</p>
+<p>Although my original code passes, apparently it’s against the spirit of the exercise. A simple delimiter is technically not allowed because any string that contains the delimiter will cause the decoder to fail. You could get around that by using an escape character. However, NeetCode’s solution uses a simple length-prefixing approach:</p>
+<p>The <code>encode</code> method takes the list of strings and concatenates each string with its length prefixed by a separator “#”. The <code>decode</code> method then reverses the encoding process, parsing the encoded string by iterating through it, extracting each string based on its prefixed length and the separator.</p>
 <ul>
-<li>Time complexity: O(n)</li>
-<li>Space complexity: O(n)</li>
+<li>Time complexity: <code>encode</code> is possibly <span class="math inline">\(O(n^2)\)</span>; see above. <code>decode</code> is <span class="math inline">\(O(n)\)</span></li>
+<li>Space complexity: both <span class="math inline">\(O(n)\)</span></li>
 </ul>
 
 
