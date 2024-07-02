@@ -9,6 +9,7 @@
   {
     "listing": "/dsa.html",
     "items": [
+      "/dsaposts/valid-sudoku/ValidSudoku.html",
       "/dsaposts/product-array-except-self/ProductArrayExceptSelf.html",
       "/dsaposts/string-encode-decode/StringEncodeDecode.html",
       "/dsaposts/top-k-elements/TopKElementsinList.html",

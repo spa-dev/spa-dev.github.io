@@ -306,7 +306,7 @@ Output: [0, 0]
 </div>
 </div>
 <p>Well, my code became a little convoluted trying to deal with the edge cases involving zeros. I tried it on LeetCode, not realizing that division was not allowed. Somehow it was accepted and beat 81% of submissions for time and 92% for memory.</p>
-<p>No doubt there is a better way to deal with the zeros; maybe just count them up as we go, rather than flag their presence.</p>
+<p>No doubt there is a better way to deal with the zeros; maybe just count them up as we go, rather than flag their presence. That way we could break out of the loop early to <code>return [0] * len(nums)</code> as soon as we see two zeros.</p>
 <ul>
 <li>Time complexity: <span class="math inline">\(O(n)\)</span> for the intial loop + <span class="math inline">\(O(n)\)</span> for the results = <span class="math inline">\(O(n)\)</span> overall</li>
 <li>Space complexity: <span class="math inline">\(O(n)\)</span> for the results list and potentially for the zeros list too if nums is all 0.</li>
