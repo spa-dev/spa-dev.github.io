@@ -141,6 +141,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/spa-dev"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
 </div>
@@ -290,7 +297,7 @@ DEBUG: Updated dict value(s): 'aht': ['hat']</code></pre>
 <pre><code>[['act', 'cat'], ['pots', 'tops', 'stop'], ['hat']]</code></pre>
 </div>
 </div>
-<p><strong>Initial Results:</strong></p>
+<p><strong>Initial Results</strong></p>
 <p>IntialSolution passes NeetCode submission (if we comment out the logging).</p>
 <ul>
 <li>Time Complexity: O(m⋅n⋅logn) — due to sorting each string.</li>
@@ -322,7 +329,7 @@ DEBUG: Updated dict value(s): 'aht': ['hat']</code></pre>
 </div>
 </div>
 <p>I used <code>list()</code> above to display the result nicely in the notebook. The code seems to work fine in NeetCode both with and without the conversion to a list; no TypeError is given.</p>
-<p><strong>Conclusion:</strong></p>
+<p><strong>Conclusion</strong></p>
 <p>Neetcode’s solution uses a hashmap (defaultdict) called <code>result</code> that stores lists of anagrams, where the key is a tuple representing the character counts of the strings. Note that a defaultdict never raises a KeyError, but instead provides a default value for a key that does not exist.</p>
 <ul>
 <li>Time complexity O(m⋅n) — where m is the total number of strings and n is the length of each string (multiplied by 26 possible letters)</li>
@@ -743,6 +750,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://giscus.app/client.js" data-repo="spa-dev/spa-dev.github.io" data-repo-id="R_kgDOMAQNZQ" data-category="Announcements" data-category-id="DIC_kwDOMAQNZc4Cgigv" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 
 

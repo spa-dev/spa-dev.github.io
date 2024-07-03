@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://spa-dev.github.io/fastai.html</loc>
-    <lastmod>2024-06-02T23:37:18.081Z</lastmod>
+    <loc>https://spa-dev.github.io/index.html</loc>
+    <lastmod>2024-07-03T01:01:44.758Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsa.html</loc>
+    <lastmod>2024-07-03T01:01:24.919Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/fastai/fastai-P2L12/fastai-P2L12-meanshift.html</loc>
+    <lastmod>2024-06-16T15:39:31.232Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/valid-sudoku/ValidSudoku.html</loc>
+    <lastmod>2024-07-02T02:51:24.543Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/string-encode-decode/StringEncodeDecode.html</loc>
+    <lastmod>2024-07-03T01:05:31.579Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/group-anagrams/GroupAnagrams.html</loc>
+    <lastmod>2024-07-03T01:03:53.459Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/contains-duplicate/index.html</loc>
+    <lastmod>2024-07-03T01:03:01.687Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/welcome/index.html</loc>
+    <lastmod>2024-07-03T01:02:09.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/two-sum-integer/index.html</loc>
+    <lastmod>2024-07-03T01:06:34.992Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/top-k-elements/TopKElementsinList.html</loc>
+    <lastmod>2024-07-03T01:06:12.552Z</lastmod>
+  </url>
+  <url>
+    <loc>https://spa-dev.github.io/dsaposts/product-array-except-self/ProductArrayExceptSelf.html</loc>
+    <lastmod>2024-07-03T01:04:46.373Z</lastmod>
   </url>
   <url>
     <loc>https://spa-dev.github.io/fastai/fastai-P2L10/fastai-P2L10-sd.html</loc>
@@ -10,50 +50,10 @@
   </url>
   <url>
     <loc>https://spa-dev.github.io/about.html</loc>
-    <lastmod>2024-05-27T19:31:25.053Z</lastmod>
+    <lastmod>2024-07-03T01:01:10.764Z</lastmod>
   </url>
   <url>
-    <loc>https://spa-dev.github.io/dsaposts/product-array-except-self/ProductArrayExceptSelf.html</loc>
-    <lastmod>2024-06-26T03:04:19.839Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsaposts/top-k-elements/TopKElementsinList.html</loc>
-    <lastmod>2024-06-16T01:42:25.373Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsaposts/two-sum-integer/index.html</loc>
-    <lastmod>2024-05-29T02:38:36.804Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsaposts/welcome/index.html</loc>
-    <lastmod>2024-05-29T02:57:03.448Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/index.html</loc>
-    <lastmod>2024-05-27T04:28:27.734Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsaposts/contains-duplicate/index.html</loc>
-    <lastmod>2024-06-04T23:11:35.616Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsaposts/group-anagrams/GroupAnagrams.html</loc>
-    <lastmod>2024-06-08T00:36:12.885Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsaposts/string-encode-decode/StringEncodeDecode.html</loc>
-    <lastmod>2024-06-19T00:04:14.083Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsaposts/valid-sudoku/ValidSudoku.html</loc>
-    <lastmod>2024-07-02T02:51:24.543Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/dsa.html</loc>
-    <lastmod>2024-05-29T02:46:45.949Z</lastmod>
-  </url>
-  <url>
-    <loc>https://spa-dev.github.io/fastai/fastai-P2L12/fastai-P2L12-meanshift.html</loc>
-    <lastmod>2024-06-16T15:39:31.232Z</lastmod>
+    <loc>https://spa-dev.github.io/fastai.html</loc>
+    <lastmod>2024-07-03T01:01:35.129Z</lastmod>
   </url>
 </urlset>
