@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="spa-dev">
-<meta name="dcterms.date" content="2024-06-03">
+<meta name="dcterms.date" content="2024-07-06">
 
-<title>spa-dev - LeetCode 49: Group Anagrams</title>
+<title>spa-dev - LeetCode 128: Longest Consecutive Sequence</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -187,7 +187,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">LeetCode 49: Group Anagrams</h1>
+      <h1 class="title">LeetCode 128: Longest Consecutive Sequence</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
                 <div class="quarto-category">arrays and hashing</div>
@@ -209,7 +209,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">June 3, 2024</p>
+        <p class="date">July 6, 2024</p>
       </div>
     </div>
     
@@ -226,7 +226,10 @@ window.Quarto = {
    
   <ul>
   <li><a href="#problem-description" id="toc-problem-description" class="nav-link active" data-scroll-target="#problem-description">Problem Description</a></li>
-  <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a></li>
+  <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a>
+  <ul class="collapse">
+  <li><a href="#test-function" id="toc-test-function" class="nav-link" data-scroll-target="#test-function">Test function</a></li>
+  </ul></li>
   <li><a href="#neetcode-solution" id="toc-neetcode-solution" class="nav-link" data-scroll-target="#neetcode-solution">NeetCode Solution</a></li>
   </ul>
 </nav>
@@ -241,135 +244,110 @@ window.Quarto = {
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
 <p>Difficulty: <span style="color:orange"><strong>Medium</strong></span></p>
-<p>Given an array of strings <code>strs</code>, group all anagrams together into sublists. You may return the output in any order.</p>
-<p><strong>Example 1:</strong></p>
-<pre><code>Input: strs = ["act","pots","tops","cat","stop","hat"]
-Output: [["hat"],["act", "cat"],["stop", "pots", "tops"]]</code></pre>
-<p><strong>Example 2:</strong></p>
-<pre><code>Input: strs = ["x"]
-Output: [["x"]]</code></pre>
-<p><strong>Example 3:</strong></p>
-<pre><code>Input: strs = [""]
-Output: [[""]]</code></pre>
+<p>Given an array of integers <code>nums</code>, return the length of the longest consecutive sequence of elements.</p>
+<p>A consecutive sequence is a sequence of elements in which each element is exactly 1 greater than the previous element.</p>
+<p>Write an algorithm that runs in <span class="math inline">\(O(n)\)</span> time.</p>
+<p><strong>Examples:</strong></p>
+<pre><code>Input: nums = [2,20,4,10,3,4,5]
+Output: 4
+Explanation: The longest consecutive sequence is [2, 3, 4, 5].
+
+Input: nums = [0,3,2,5,4,6,1,1]
+Output: 7</code></pre>
+<p><strong>Constraints:</strong></p>
+<pre><code>0 &lt;= nums.length &lt;= 1000 on NeetCode or &lt;= 10^5 on LeetCode
+-10^9 &lt;= nums[i] &lt;= 10^9</code></pre>
 </section>
 <section id="initial-solution" class="level2">
 <h2 class="anchored" data-anchor-id="initial-solution">Initial Solution</h2>
-<p>The key to this problem was to recognize that when anagrams are sorted alphabetically, they become the same ‘word’. With that in mind, a decent solution seemed relatively easy to come up with. Let’s just sort the words and place the original word in a dictionary with the keys being the unique sorted/garbled word.</p>
-<p>There are a few parts that could potentially trip up a beginner:</p>
-<p>Firstly, calling <code>sorted()</code> on a string returns a list of the sorted characters and not a whole sorted word:</p>
-<pre><code>word = 'hello'
-sorted_word = sorted(word)
-print(sorted_word)
-&gt;&gt;&gt; ['e', 'h', 'l', 'l', 'o']</code></pre>
-<p>So we must <code>join()</code> the list back together afterwards.</p>
-<p>Secondly, adding values to a pre-existing key in the dictionary, instead of overwriting them, takes a little care, but there are a <a href="https://stackoverflow.com/questions/20585920/how-to-add-multiple-values-to-a-dictionary-key">few options noted in this post</a>. For example, using <code>append()</code> and <code>extend()</code>. The TLDR is to use <code>extend()</code> when you have multiple values to append, rather than using <code>append()</code> multiple times. E.g.</p>
-<pre><code>a = {}
-a.setdefault('abc', []).append(1)       # {'abc': [1]}
-a.setdefault('abc', []).extend([2, 3])  # a is now {'abc': [1, 2, 3]}</code></pre>
-<p><code>setdefault()</code> will avoid a KeyError when we try to access a key that does not exist yet. It inserts the key with the specified default: []</p>
-<p>Let’s put this all together in our initial attempt at solving the anagram problem.</p>
-<div id="19bce42e-b7a5-4598-be48-e881d18f333e" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="19bce42e-b7a5-4598-be48-e881d18f333e" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1fb542a8-a9e1-466d-9e4f-21a49278a8de" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set up logging config</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        logging.basicConfig(level<span class="op">=</span>logging.DEBUG, <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(levelname)s</span><span class="st">: </span><span class="sc">%(message)s</span><span class="st">"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> groupAnagrams(<span class="va">self</span>, strs: List[<span class="bu">str</span>]) <span class="op">-&gt;</span> List[List[<span class="bu">str</span>]]:</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="co"># works fine without the if statement, but let's save some later computation:</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> strs <span class="op">==</span> [<span class="st">""</span>]:</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> [[<span class="st">""</span>]]</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        words <span class="op">=</span> {}</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> word <span class="kw">in</span> strs:</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(<span class="ss">f"Processing word: </span><span class="sc">{</span>word<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>            sorted_word <span class="op">=</span> <span class="st">""</span>.join(<span class="bu">sorted</span>(word))</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># n⋅log(n) character sorting * m strings in the list</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(<span class="ss">f"Sorted 'word': </span><span class="sc">{</span>sorted_word<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>            words.setdefault(sorted_word, []).append(word)</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"Updated dict value(s): '</span><span class="sc">{</span>sorted_word<span class="sc">}</span><span class="ss">': </span><span class="sc">{</span>words[sorted_word]<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">list</span>(words.values())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="5c194ea5-0a98-498d-adc7-11795406b208" class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> longestConsecutive(<span class="va">self</span>, nums: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> nums:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        nums_set <span class="op">=</span> <span class="bu">set</span>(nums)  <span class="co"># set() is O(n) time</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        longest_seq <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> num <span class="kw">in</span> nums_set:</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> num <span class="op">-</span> <span class="dv">1</span> <span class="kw">not</span> <span class="kw">in</span> nums_set:  <span class="co"># fails LeetCode without this</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                current_num <span class="op">=</span> num  <span class="co"># unnecessary new variable</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                current_seq <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">while</span> current_num <span class="op">+</span> <span class="dv">1</span> <span class="kw">in</span> nums_set:</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                    current_num <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                    current_seq <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                longest_seq <span class="op">=</span> <span class="bu">max</span>(longest_seq, current_seq)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> longest_seq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="45ebe8d0-4b8d-4dfc-93b2-bb54dd3dbc7b" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example for testing purposes.</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>strs <span class="op">=</span> [<span class="st">"act"</span>, <span class="st">"pots"</span>, <span class="st">"tops"</span>, <span class="st">"cat"</span>, <span class="st">"stop"</span>, <span class="st">"hat"</span>]</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Output: [["hat"],["act", "cat"],["stop", "pots", "tops"]]</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that output order does not matter.</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> InitialSolution()</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>solution.groupAnagrams(strs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>DEBUG: Processing word: act
-DEBUG: Sorted 'word': act
-DEBUG: Updated dict value(s): 'act': ['act']
-DEBUG: Processing word: pots
-DEBUG: Sorted 'word': opst
-DEBUG: Updated dict value(s): 'opst': ['pots']
-DEBUG: Processing word: tops
-DEBUG: Sorted 'word': opst
-DEBUG: Updated dict value(s): 'opst': ['pots', 'tops']
-DEBUG: Processing word: cat
-DEBUG: Sorted 'word': act
-DEBUG: Updated dict value(s): 'act': ['act', 'cat']
-DEBUG: Processing word: stop
-DEBUG: Sorted 'word': opst
-DEBUG: Updated dict value(s): 'opst': ['pots', 'tops', 'stop']
-DEBUG: Processing word: hat
-DEBUG: Sorted 'word': aht
-DEBUG: Updated dict value(s): 'aht': ['hat']</code></pre>
+<section id="test-function" class="level3">
+<h3 class="anchored" data-anchor-id="test-function">Test function</h3>
+<div id="b4663b0a-ded8-4e25-b64f-4ff576d99b57" class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_longest_consecutive(solution_class):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Simple test function. Not extensive."""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    nums_empty <span class="op">=</span> []</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    nums0 <span class="op">=</span> [<span class="dv">0</span>]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    nums1 <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">20</span>, <span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    nums2 <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    nums3 <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    nums_list <span class="op">=</span> [nums_empty, nums0, nums1, nums2, nums3]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    expected <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">9</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    solution <span class="op">=</span> solution_class()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> [solution.longestConsecutive(nums) <span class="cf">for</span> nums <span class="kw">in</span> nums_list]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> results <span class="op">==</span> expected:</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tests passed"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tests failed"</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Expected:"</span>, expected)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Got:"</span>, results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="29">
-<pre><code>[['act', 'cat'], ['pots', 'tops', 'stop'], ['hat']]</code></pre>
+<div id="0eedfa2c-6997-432c-b9f1-99c071bfa31d" class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>test_longest_consecutive(InitialSolution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tests passed</code></pre>
 </div>
 </div>
-<p><strong>Initial Results</strong></p>
-<p>IntialSolution passes NeetCode submission (if we comment out the logging).</p>
+<p><strong>Intial Results</strong></p>
+<p>This seemed hard for a medium-level problem. I struggled to create something that didn’t involve sorting, as most sorting algorithms are <span class="math inline">\(n⋅log(n)\)</span> or <span class="math inline">\(n^2\)</span> time complexity. <a href="https://www.geeksforgeeks.org/time-complexities-of-all-sorting-algorithms">Radix and count sort</a> are notable exceptions. My solution must be a pretty decent one as it beats 68% of submissions for run time, although it only beats 18% for memory. As we see later in NeetCode’s solution, mine has a few extra variables adding to the memory usage.</p>
+<p>I needed to add the check to see if the number was already part of a sequence (<code>if num - 1 not in nums_set:</code>) to get it to pass LeetCode. The constraints are looser on NeetCode, so the original attempt was fine there, although slow. On LeetCode, it failed without the check (timed out) when given a really long consecutive sequence of length 100000. The key piece is that little check, as without it the time complexity is <span class="math inline">\(O(n⋅m)\)</span>, where <span class="math inline">\(n\)</span> is the number of elements in <code>nums</code>, and <span class="math inline">\(m\)</span> is the maximum length of a consecutive sequence. In the worst case, this is <span class="math inline">\(O(n^2)\)</span> if the maximum length is a single long sequence of length <span class="math inline">\(n\)</span>.</p>
 <ul>
-<li>Time complexity: <span class="math inline">\(O(m⋅n⋅log(n))\)</span> due to sorting each string.</li>
-<li>Space complexity: <span class="math inline">\(O(m⋅n)\)</span> due to storing the strings in the dictionary keys and values.</li>
+<li>Time complexity: <span class="math inline">\(O(n)\)</span> comprising <span class="math inline">\(O(n)\)</span> for the set operation and <span class="math inline">\(O(n)\)</span> to iterate over the set and perform checks.</li>
+<li>Space complexity: <span class="math inline">\(O(n)\)</span> predominantly due to storing the set.</li>
 </ul>
+</section>
 </section>
 <section id="neetcode-solution" class="level2">
 <h2 class="anchored" data-anchor-id="neetcode-solution">NeetCode Solution</h2>
-<div id="9707123a-60f2-4eb4-9b36-49c4906944c7" class="cell" data-execution_count="114">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> groupAnagrams(<span class="va">self</span>, strs: List[<span class="bu">str</span>]) <span class="op">-&gt;</span> List[List[<span class="bu">str</span>]]:</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> defaultdict(<span class="bu">list</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> s <span class="kw">in</span> strs:</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            count <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> <span class="dv">26</span>  <span class="co"># one for each character in a-z</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> c <span class="kw">in</span> s:</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                <span class="co"># use ord to get unicode value of the character</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                count[<span class="bu">ord</span>(c) <span class="op">-</span> <span class="bu">ord</span>(<span class="st">"a"</span>)] <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>            <span class="co"># convert count list to tuple, as lists can't be dict keys</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>            result[<span class="bu">tuple</span>(count)].append(s)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result.values()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="9707123a-60f2-4eb4-9b36-49c4906944c7" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> longestConsecutive(<span class="va">self</span>, nums: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        numSet <span class="op">=</span> <span class="bu">set</span>(nums)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        longest <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> n <span class="kw">in</span> numSet:</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="kw">not</span> <span class="kw">in</span> numSet:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                length <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">while</span> (n <span class="op">+</span> length) <span class="kw">in</span> numSet:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                    length <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                longest <span class="op">=</span> <span class="bu">max</span>(length, longest)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> longest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="968d3d6a-93d7-4809-8f18-f6b3f95a45b1" class="cell" data-execution_count="115">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(solution.groupAnagrams(strs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="115">
-<pre><code>[['act', 'cat'], ['pots', 'tops', 'stop'], ['hat']]</code></pre>
+<div id="0a480c62-a0c5-49d1-a2e2-5b48688330e4" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>test_longest_consecutive(Solution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tests passed</code></pre>
 </div>
 </div>
-<p>I used <code>list()</code> above to display the result nicely in the notebook. The code seems to work fine in NeetCode both with and without the conversion to a list; no TypeError is given.</p>
 <p><strong>Conclusion</strong></p>
-<p>Neetcode’s solution uses a hashmap (defaultdict) called <code>result</code> that stores lists of anagrams, where the key is a tuple representing the character counts of the strings. Note that a defaultdict never raises a KeyError, but instead provides a default value for a key that does not exist.</p>
-<ul>
-<li>Time complexity <span class="math inline">\(O(m⋅n)\)</span> where m is the total number of strings and n is the length of each string (multiplied by 26 possible letters)</li>
-<li>Space complexity: <span class="math inline">\(O(m⋅n)\)</span> due to the space needed for storing the strings in the defaultdict values.</li>
-</ul>
-<p>Given an extremely long string, the above solution would be optimal: <span class="math inline">\(O(m⋅n⋅log(n))\)</span> vs.&nbsp;<span class="math inline">\(O(m⋅n⋅26)\)</span></p>
+<p>NeetCode’s solution is cleaner but essentially the same approach. It simplifies the tracking of the current sequence length within the while loop, saving a small amount of memory (it beats around 63% of submissions on memory).</p>
 
 
 </section>
