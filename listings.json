@@ -2,6 +2,7 @@
   {
     "listing": "/dsa.html",
     "items": [
+      "/dsaposts/valid-palindrome/IsPalindrome.html",
       "/dsaposts/longest_consec_seq/LongestConsecSeq.html",
       "/dsaposts/valid-sudoku/ValidSudoku.html",
       "/dsaposts/product-array-except-self/ProductArrayExceptSelf.html",

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="spa-dev">
-<meta name="dcterms.date" content="2024-06-24">
+<meta name="dcterms.date" content="2024-07-09">
 
-<title>spa-dev - LeetCode 238: Product of Array Except Self</title>
+<title>spa-dev - LeetCode 125: Valid Palindrome</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -190,11 +190,12 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">LeetCode 238: Product of Array Except Self</h1>
+      <h1 class="title">LeetCode 125: Valid Palindrome</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
-                <div class="quarto-category">arrays and hashing</div>
-                <div class="quarto-category">medium</div>
+                <div class="quarto-category">two pointers</div>
+                <div class="quarto-category">logging</div>
+                <div class="quarto-category">easy</div>
               </div>
                   </div>
   </div>
@@ -212,7 +213,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">June 24, 2024</p>
+        <p class="date">July 9, 2024</p>
       </div>
     </div>
     
@@ -229,7 +230,12 @@ window.Quarto = {
    
   <ul>
   <li><a href="#problem-description" id="toc-problem-description" class="nav-link active" data-scroll-target="#problem-description">Problem Description</a></li>
-  <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a></li>
+  <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a>
+  <ul class="collapse">
+  <li><a href="#a-note-on-logging" id="toc-a-note-on-logging" class="nav-link" data-scroll-target="#a-note-on-logging">A note on logging</a></li>
+  <li><a href="#clean-version-of-code" id="toc-clean-version-of-code" class="nav-link" data-scroll-target="#clean-version-of-code">Clean version of code</a></li>
+  <li><a href="#test-function" id="toc-test-function" class="nav-link" data-scroll-target="#test-function">Test function</a></li>
+  </ul></li>
   <li><a href="#neetcode-solution" id="toc-neetcode-solution" class="nav-link" data-scroll-target="#neetcode-solution">NeetCode Solution</a></li>
   </ul>
 </nav>
@@ -243,104 +249,217 @@ window.Quarto = {
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
-<p>Difficulty: <span style="color:orange"><strong>Medium</strong></span></p>
-<p>Given an integer array <code>nums</code>, return an array output where <code>output[i]</code> is the product of all the elements of <code>nums</code> except <code>nums[i]</code>.</p>
-<p>Each product is guaranteed to fit in a 32-bit integer.</p>
-<p>LeetCode version: You must write an algorithm that runs in <span class="math inline">\(O(n)\)</span> time and without using the division operation.</p>
-<p>NeetCode version: Follow-up: Could you solve it in <span class="math inline">\(O(n)\)</span> time without using the division operation?</p>
-<p><strong>Example 1:</strong></p>
-<pre><code>Input: nums = [1,2,4,6]
-Output: [48,24,12,8]</code></pre>
-<p><strong>Example 2:</strong></p>
-<pre><code>Input: nums = [-1,0,1,2,3]
-Output: [0,-6,0,0,0]</code></pre>
+<p>Difficulty: <span style="color:green"><strong>Easy</strong></span></p>
+<p>Given a string <code>s</code>, return <code>True</code> if it is a palindrome, otherwise return <code>False</code>.</p>
+<p>A palindrome is a string that is identical when read from both directions, disregarding case differences and excluding all non-alphanumeric characters.</p>
+<p>This problem is also known as “Is Palindrome” on NeetCode.</p>
+<p><strong>Examples:</strong></p>
+<pre><code>Input: s = "Was it a car or a cat I saw?"
+Output: true
+
+Input: s = "tab a cat"
+Output: false</code></pre>
 <p><strong>Constraints:</strong></p>
-<pre><code> 2 &lt;= nums.length &lt;= 1000
--20 &lt;= nums[i] &lt;= 20</code></pre>
+<pre><code>1 &lt;= s.length &lt;= 1000
+s consists of only printable ASCII characters.</code></pre>
 </section>
 <section id="initial-solution" class="level2">
 <h2 class="anchored" data-anchor-id="initial-solution">Initial Solution</h2>
-<p>This is known as “Products of Array Discluding Self” on NeetCode. The problem there allows you to use the division operation, so I went with the easy route first.</p>
 <div id="19bce42e-b7a5-4598-be48-e881d18f333e" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="eaf9fb8b-63c6-4d4a-a4d2-9908bb91930b" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> productExceptSelf(<span class="va">self</span>, nums: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        product <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        contains_zero <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        zeros <span class="op">=</span> []</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(nums):</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                contains_zero <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                zeros.append(i)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                product <span class="op">*=</span> n</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> contains_zero:</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> [product <span class="op">//</span> n <span class="cf">for</span> n <span class="kw">in</span> nums]</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># If more than one zero, all products will be zero:</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(zeros) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> [<span class="dv">0</span>] <span class="op">*</span> <span class="bu">len</span>(nums)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># If exactly one zero</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="dv">0</span> <span class="cf">if</span> i <span class="kw">not</span> <span class="kw">in</span> zeros <span class="cf">else</span> product <span class="cf">for</span> i, _ <span class="kw">in</span> <span class="bu">enumerate</span>(nums)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="5c194ea5-0a98-498d-adc7-11795406b208" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> isPalindrome(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="co"># be sure not to use .isalpha :)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        clean_s <span class="op">=</span> <span class="st">""</span>.join(char.lower() <span class="cf">for</span> char <span class="kw">in</span> s <span class="cf">if</span> char.isalnum())</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, letter <span class="kw">in</span> <span class="bu">enumerate</span>(clean_s):</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> letter <span class="op">!=</span> clean_s[<span class="op">-</span><span class="dv">1</span> <span class="op">-</span> i]:</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>       </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">#  In hindsight, the following would be cleaner,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="co">#  but not sure if it would allow us to return early?</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">#  return clean_s == clean_s[::-1]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="eb311f1a-75bc-41a8-8f1f-a6b39681e705" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nums_tests <span class="op">=</span> [</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    ([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>], [<span class="dv">48</span>, <span class="dv">24</span>, <span class="dv">12</span>, <span class="dv">8</span>]),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    ([<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">0</span>, <span class="op">-</span><span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]),</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    ([<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>])</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> InitialSolution()</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nums, expected_output <span class="kw">in</span> nums_tests:</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> solution.productExceptSelf(nums)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Input: </span><span class="sc">{</span>nums<span class="sc">}</span><span class="ch">\n</span><span class="ss">Expected: </span><span class="sc">{</span>expected_output<span class="sc">}</span><span class="ch">\n</span><span class="ss">Output: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="2e628b70-d2ba-4b75-9942-4b8f06293706" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  Test function is defined below</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>test_isPalindrome(InitialSolution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Input: [1, 2, 4, 6]
-Expected: [48, 24, 12, 8]
-Output: [48, 24, 12, 8]
-
-Input: [-1, 0, 1, 2, 3]
-Expected: [0, -6, 0, 0, 0]
-Output: [0, -6, 0, 0, 0]
-
-Input: [0, 0]
-Expected: [0, 0]
-Output: [0, 0]
-</code></pre>
+<pre><code>Tests passed</code></pre>
 </div>
 </div>
-<p>Well, my code became a little convoluted trying to deal with the edge cases involving zeros. I tried it on LeetCode, not realizing that division was not allowed. Somehow it was accepted and beat 81% of submissions for time and 92% for memory.</p>
-<p>No doubt there is a better way to deal with the zeros; maybe just count them up as we go, rather than flag their presence. That way we could break out of the loop early to <code>return [0] * len(nums)</code> as soon as we see two zeros.</p>
+<p><strong>Intial Results</strong></p>
+<p>My first attempt didn’t require too much effort to produce; however, I was disappointed to find it was rated in the bottom 40% for time and bottom 8% for memory. That initial string cleaning definitely cost me some time and memory. My poor attempt forced me to learn why these are called two-pointer algorithms! I basically have only one pointer (<code>i</code>), when we need two so they can act independently at each end of the string, cleaning (or ignoring) as we go.</p>
 <ul>
-<li>Time complexity: <span class="math inline">\(O(n)\)</span> for the intial loop + <span class="math inline">\(O(n)\)</span> for the results = <span class="math inline">\(O(n)\)</span> overall</li>
-<li>Space complexity: <span class="math inline">\(O(n)\)</span> for the results list and potentially for the zeros list too if nums is all 0.</li>
+<li>Time complexity: <span class="math inline">\(O(n)\)</span> for cleaning the string plus <span class="math inline">\(O(n)\)</span> for the palindrome check, i.e., still <span class="math inline">\(O(n)\)</span> overall.</li>
+<li>Space complexity: <span class="math inline">\(O(n)\)</span> due to the extra memory used by the clean string <code>clean_s</code>.</li>
 </ul>
-<p>LeetCode analyzed this as using <span class="math inline">\(O(1)\)</span> space, but considers that “The output array does not count as extra space for space complexity analysis”.</p>
-<p>After reading youtube comments on this problem, I learned that LeetCode will apparently reject a solution that contains the division operator. My solution used integer division <code>//</code> which somehow escaped this rule. Others complained that Leetcode would also reject multiple subtraction operations, so I really don’t understand what’s going on. I guess they relaxed the requirements recently. Relatedly, some bright spark on youtube suggested using math.pow(num,-1) to hack the requirements 😄</p>
+<p>Let’s try again…</p>
+<div id="0c0d4a1d-592e-4db4-a5d6-b45b91fd8810" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Set up logging</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        logging.basicConfig(level<span class="op">=</span>logging.DEBUG, <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(levelname)s</span><span class="st">: </span><span class="sc">%(message)s</span><span class="st">"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> isPalindrome(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Initialize pointers</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        left <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        right <span class="op">=</span> <span class="bu">len</span>(s) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.logger.debug(<span class="st">"Initial string: </span><span class="sc">%s</span><span class="st">"</span>, s)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.logger.debug(<span class="st">"Initial left pointer: </span><span class="sc">%d</span><span class="st">, right pointer: </span><span class="sc">%d</span><span class="st">"</span>, left, right)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> left <span class="op">&lt;</span> right:</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> left <span class="op">&lt;</span> right <span class="kw">and</span> <span class="kw">not</span> s[left].isalnum():</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.logger.debug(</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Skipping non-alphanumeric character at left </span><span class="sc">%d</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, left, s[left]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>                left <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> right <span class="op">&gt;</span> left <span class="kw">and</span> <span class="kw">not</span> s[right].isalnum():</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.logger.debug(</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Skipping non-alphanumeric character at right </span><span class="sc">%d</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>                    right,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>                    s[right],</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                right <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> s[left].lower() <span class="op">!=</span> s[right].lower():</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.logger.debug(</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Characters do not match: </span><span class="sc">%s</span><span class="st"> != </span><span class="sc">%s</span><span class="st">"</span>,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>                    s[left].lower(),</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>                    s[right].lower(),</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Characters match: </span><span class="sc">%s</span><span class="st"> == </span><span class="sc">%s</span><span class="st">"</span>, s[left].lower(), s[right].lower()</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>            left <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>            right <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Updated left pointer: </span><span class="sc">%d</span><span class="st">, right pointer: </span><span class="sc">%d</span><span class="st">"</span>, left, right</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.logger.debug(<span class="st">"String is a palindrome"</span>)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="dcdb7026-7e43-4d39-b791-a29756da27bb" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"No lemon, no melon"</span>  <span class="co"># True</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>solution.isPalindrome(s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>DEBUG: Initial string: No lemon, no melon
+DEBUG: Initial left pointer: 0, right pointer: 17
+DEBUG: Characters match: n == n
+DEBUG: Updated left pointer: 1, right pointer: 16
+DEBUG: Characters match: o == o
+DEBUG: Updated left pointer: 2, right pointer: 15
+DEBUG: Skipping non-alphanumeric character at left 2:  
+DEBUG: Characters match: l == l
+DEBUG: Updated left pointer: 4, right pointer: 14
+DEBUG: Characters match: e == e
+DEBUG: Updated left pointer: 5, right pointer: 13
+DEBUG: Characters match: m == m
+DEBUG: Updated left pointer: 6, right pointer: 12
+DEBUG: Skipping non-alphanumeric character at right 12:  
+DEBUG: Characters match: o == o
+DEBUG: Updated left pointer: 7, right pointer: 10
+DEBUG: Characters match: n == n
+DEBUG: Updated left pointer: 8, right pointer: 9
+DEBUG: Skipping non-alphanumeric character at left 8: ,
+DEBUG: Characters match:   ==  
+DEBUG: Updated left pointer: 10, right pointer: 8
+DEBUG: String is a palindrome</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>True</code></pre>
+</div>
+</div>
+<section id="a-note-on-logging" class="level3">
+<h3 class="anchored" data-anchor-id="a-note-on-logging">A note on logging</h3>
+<p>I used the built-in JupyterLab debugger to debug my initial attempt, but decided to add logging (above) to help visualize the code better after tripping up on various different edge cases. ChatGPT provided the logging statements, but I was curious why it used the old-style % formatting instead of f-strings…</p>
+<p>Well, today I learned, be careful when using f-strings for logging, as the Python logging library was <a href="https://docs.python.org/3/howto/logging.html#optimization">optimized to use %s formatting style</a>. Although, you can add some extra code if you wish to use f-strings efficiently (see Stack Overflow discussion <a href="https://stackoverflow.com/questions/54367975/python-3-7-logging-f-strings-vs">here</a> and <a href="https://stackoverflow.com/questions/13500813/how-to-use-modern-string-formatting-options-with-pythons-logging-module">here</a> as well as the <a href="https://docs.python.org/3/howto/logging-cookbook.html#formatting-styles">Python documentation</a>).</p>
+</section>
+<section id="clean-version-of-code" class="level3">
+<h3 class="anchored" data-anchor-id="clean-version-of-code">Clean version of code</h3>
+<p>The final clean version of my function is below. In LeetCode, this beat 68% of submissions on time and 77% on memory, so it’s much improved.</p>
+<div id="36ba29ff-8f89-4fc6-bb62-3919a48a9bdb" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CleanSolution:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> isPalindrome(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        left <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        right <span class="op">=</span> <span class="bu">len</span>(s) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> left <span class="op">&lt;</span> right:</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> left <span class="op">&lt;</span> right <span class="kw">and</span> <span class="kw">not</span> s[left].isalnum():</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                left <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> right <span class="op">&gt;</span> left <span class="kw">and</span> <span class="kw">not</span> s[right].isalnum():</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                right <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> s[left].lower() <span class="op">!=</span> s[right].lower():</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>            left <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>            right <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="a8991e5a-ce18-4428-aabf-d4470cf6d7bf" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>test_isPalindrome(CleanSolution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tests passed</code></pre>
+</div>
+</div>
+</section>
+<section id="test-function" class="level3">
+<h3 class="anchored" data-anchor-id="test-function">Test function</h3>
+<div id="cf06c5b9-6312-4675-81cd-b87e0076b753" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_isPalindrome(solution_class):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Simple test function. Not extensive."""</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    test_cases <span class="op">=</span> [</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">"A man, a plan, a canal: Panama"</span>, <span class="st">"expected"</span>: <span class="va">True</span>},</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">" "</span>, <span class="st">"expected"</span>: <span class="va">True</span>},</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">".,"</span>, <span class="st">"expected"</span>: <span class="va">True</span>},</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">"No lemon, no melon"</span>, <span class="st">"expected"</span>: <span class="va">True</span>},</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">"Was it a car or a cat I saw?"</span>, <span class="st">"expected"</span>: <span class="va">True</span>},</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">"tab a cat"</span>, <span class="st">"expected"</span>: <span class="va">False</span>},</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">"0P"</span>, <span class="st">"expected"</span>: <span class="va">False</span>},</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">"a"</span>, <span class="st">"expected"</span>: <span class="va">True</span>},</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"input"</span>: <span class="st">"a."</span>, <span class="st">"expected"</span>: <span class="va">True</span>},</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    solution <span class="op">=</span> solution_class()</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> [solution.isPalindrome(test_case[<span class="st">"input"</span>]) <span class="cf">for</span> test_case <span class="kw">in</span> test_cases]</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    expected <span class="op">=</span> [test_case[<span class="st">"expected"</span>] <span class="cf">for</span> test_case <span class="kw">in</span> test_cases]</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> results <span class="op">==</span> expected:</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tests passed"</span>)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tests failed"</span>)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Expected:"</span>, expected)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Got:"</span>, results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 <section id="neetcode-solution" class="level2">
 <h2 class="anchored" data-anchor-id="neetcode-solution">NeetCode Solution</h2>
-<div id="9707123a-60f2-4eb4-9b36-49c4906944c7" class="cell" data-execution_count="84">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> productExceptSelf(<span class="va">self</span>, nums: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> List[<span class="bu">int</span>]:</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> [<span class="dv">1</span>] <span class="op">*</span> (<span class="bu">len</span>(nums))</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(nums)):</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            res[i] <span class="op">=</span> res[i<span class="op">-</span><span class="dv">1</span>] <span class="op">*</span> nums[i<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        postfix <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(nums) <span class="op">-</span> <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>):</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            res[i] <span class="op">*=</span> postfix</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            postfix <span class="op">*=</span> nums[i]</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>NeetCode’s solution was essentially the same as above but used the following helper function instead of <code>isalnum()</code>. The complete solution is available via the <a href="https://neetcode.io/problems/is-palindrome">NeetCode problem page</a>.</p>
+<div id="0a480c62-a0c5-49d1-a2e2-5b48688330e4" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper function. Use within the Solution class</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> alphaNum(<span class="va">self</span>, c):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">ord</span>(<span class="st">"A"</span>) <span class="op">&lt;=</span> <span class="bu">ord</span>(c) <span class="op">&lt;=</span> <span class="bu">ord</span>(<span class="st">"Z"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span> <span class="bu">ord</span>(<span class="st">"a"</span>) <span class="op">&lt;=</span> <span class="bu">ord</span>(c) <span class="op">&lt;=</span> <span class="bu">ord</span>(<span class="st">"z"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span> <span class="bu">ord</span>(<span class="st">"0"</span>) <span class="op">&lt;=</span> <span class="bu">ord</span>(c) <span class="op">&lt;=</span> <span class="bu">ord</span>(<span class="st">"9"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Conclusion</strong></p>
-<p>NeetCode’s solution computes the product of all elements in the array except the current element using a two-pass approach. It uses prefix and postfix multiplication techniques to achieve this in linear time without using division.</p>
+<p>The ‘clean’ solution discussed above has the following worst-case complexity:</p>
+<ul>
+<li>Time complexity: <span class="math inline">\(O(n)\)</span> as the checks ensure each character is processed only once by either pointer.</li>
+<li>Space complexity: <span class="math inline">\(O(1)\)</span> to store the pointers. No additional data structures are needed.</li>
+</ul>
 
 
 </section>
