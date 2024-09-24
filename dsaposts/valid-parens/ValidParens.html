@@ -331,7 +331,7 @@ False
 False</code></pre>
 </div>
 </div>
-<p>This solution ran in 23 ms on LeetCode and beat 98.7% of submissions on runtime. I’m not sure I trust LeetCode’s timings completely though. I played around with <code>timeit</code>, which suggested it runs slower, at least with a very limited test set (the above tests plus a test of 7000 repeating brakets/parentheses).</p>
+<p>This solution ran in 23 ms on LeetCode and beat 98.7% of submissions on runtime. I’m not sure I trust LeetCode’s timings completely though. I played around with <code>timeit</code>, which suggested it runs slower, at least with a very limited test set (the above tests plus a test of 7000 repeating brackets/parentheses).</p>
 <p>To save a tiny fraction of memory, you could delete the <code>valid_pairs</code> dictionary and directly match each parenthesis/bracket. For example, with variations of the code below for each different type. It’s a little more readable but would be repetitive. It also ran a little slower on LeetCode too for whatever reason, perhaps a dictionary lookup is quicker.</p>
 <pre><code>match char:
     case ')':
