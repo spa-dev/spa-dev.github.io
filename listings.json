@@ -2,6 +2,7 @@
   {
     "listing": "/dsa.html",
     "items": [
+      "/dsaposts/valid-parens/ValidParens.html",
       "/dsaposts/max-water-container/MaxWaterContainer.html",
       "/dsaposts/three-sum/ThreeIntegerSum.html",
       "/dsaposts/two-sum-integer-II/TwoSumIntegerII.html",

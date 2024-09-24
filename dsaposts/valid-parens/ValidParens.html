@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="spa-dev">
-<meta name="dcterms.date" content="2024-09-19">
+<meta name="dcterms.date" content="2024-09-23">
 
-<title>spa-dev - LeetCode 11: Container With Most Water</title>
+<title>spa-dev - LeetCode 20. Valid Parentheses</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -190,11 +190,12 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">LeetCode 11: Container With Most Water</h1>
+      <h1 class="title">LeetCode 20. Valid Parentheses</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
-                <div class="quarto-category">two pointers</div>
-                <div class="quarto-category">medium</div>
+                <div class="quarto-category">stack</div>
+                <div class="quarto-category">easy</div>
+                <div class="quarto-category">match case</div>
               </div>
                   </div>
   </div>
@@ -212,7 +213,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 19, 2024</p>
+        <p class="date">September 23, 2024</p>
       </div>
     </div>
     
@@ -230,7 +231,6 @@ window.Quarto = {
   <ul>
   <li><a href="#problem-description" id="toc-problem-description" class="nav-link active" data-scroll-target="#problem-description">Problem Description</a></li>
   <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a></li>
-  <li><a href="#initial-results" id="toc-initial-results" class="nav-link" data-scroll-target="#initial-results">Initial Results</a></li>
   <li><a href="#neetcode-solution" id="toc-neetcode-solution" class="nav-link" data-scroll-target="#neetcode-solution">NeetCode Solution</a></li>
   </ul>
 </nav>
@@ -244,90 +244,109 @@ window.Quarto = {
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
-<p>Difficulty: <span style="color:orange"><strong>Medium</strong></span></p>
-<p>You are provided with an integer array <code>height</code>, where each element represents the height of a vertical line at a specific index on the x-axis.</p>
-<p>Find the two distinct lines that, along with the x-axis, form a container capable of holding the maximum amount of water.</p>
-<p><strong>Example 1:</strong></p>
-<pre><code>Input: height = [1,8,6,2,5,4,8,3,7]
-Output: 49</code></pre>
-<p>Explanation: In this case, the maximum area of water the container can contain is 49 (7 x 7). The height of the container is 7, governed by the shorter of the two lines of height 8 and 7, and the width between these two lines is 7. The container with height 8 on both sides has a width of 5; thus an area of 40 (8 x 5), which is not the maximum possible.</p>
-<p><strong>Example 2:</strong></p>
-<pre><code>Input: height = [2,2,2]
-Output: 4
-</code></pre>
-<p><strong>Constraints:</strong></p>
-<pre><code># NeetCode:
-2 &lt;= height.length &lt;= 10^3
-0 &lt;= height[i] &lt;= 10^3
+<p>Difficulty: <span style="color:green"><strong>Easy</strong></span></p>
+<p>Given a string <code>s</code> consisting only of the characters <code>(</code>, <code>)</code>, <code>{</code>, <code>}</code>, <code>[</code>, and <code>]</code>, determine whether the input string is valid.</p>
+<p>A string is considered valid if:</p>
+<ol type="1">
+<li>Open brackets are closed by the corresponding type of brackets.</li>
+<li>Open brackets are closed in the proper sequence.</li>
+<li>Each closing bracket has a matching opening bracket of the same type.</li>
+</ol>
+<p><strong>Examples:</strong></p>
+<pre><code>Input: s = "({[]})"
+Output: true
 
-# LeetCode:
-2 &lt;= height.length &lt;= 10^5
-0 &lt;= height[i] &lt;= 10^4
-</code></pre>
+Input: s = "([)]" 
+Output: false
+
+Input: "(("
+Output: false</code></pre>
+<p><strong>Constraints:</strong></p>
+<pre><code>1 &lt;= s.length &lt;= 10^4
+s consists only of the characters '()[]{}'</code></pre>
 </section>
 <section id="initial-solution" class="level2">
 <h2 class="anchored" data-anchor-id="initial-solution">Initial Solution</h2>
-<div id="19bce42e-b7a5-4598-be48-e881d18f333e" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="8fd2a5c6-1daa-4d8c-af0a-dd9efbf08b4b" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> isValid(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(s) <span class="op">&amp;</span> <span class="dv">1</span>:  <span class="co"># Odd length strings can't be valid</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        valid_pairs <span class="op">=</span> {<span class="st">")"</span>: <span class="st">"("</span>, <span class="st">"]"</span>: <span class="st">"["</span>, <span class="st">"}"</span>: <span class="st">"{"</span>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        stack <span class="op">=</span> []</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> char <span class="kw">in</span> s:</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> char <span class="kw">in</span> <span class="st">"([{"</span>:  <span class="co"># If an opener then push to stack</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                stack.append(char)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">elif</span> <span class="kw">not</span> stack <span class="kw">or</span> stack.pop() <span class="op">!=</span> valid_pairs[char]:</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">not</span> stack  <span class="co"># True if len(stack) == 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c7a3402c-352e-4465-92e3-9f31311a8caa" class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BruteForceSolution:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> maxArea(<span class="va">self</span>, heights: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        max_area <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x1, y1 <span class="kw">in</span> <span class="bu">enumerate</span>(heights):</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> x2, y2 <span class="kw">in</span> <span class="bu">enumerate</span>(heights):</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> x1 <span class="op">==</span> x2:</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">continue</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                area <span class="op">=</span> (x2 <span class="op">-</span> x1) <span class="op">*</span> <span class="bu">min</span>(y1, y2)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                max_area <span class="op">=</span> <span class="bu">max</span>(area, max_area)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> max_area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="43c34fcf-3cf8-4354-9cde-12a4de8b2e5d" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tests</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">"({[]})"</span>))  <span class="co"># True</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">"([)]"</span>))  <span class="co"># False</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">"(("</span>))  <span class="co"># False</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">")"</span>))  <span class="co"># False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+False
+False
+False</code></pre>
 </div>
-<div id="2119f979-8c5e-42bc-985f-5d1cce55b6b3" class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>heights1 <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="dv">7</span>]</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>heights2 <span class="op">=</span> [<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>]</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> BruteForceSolution()</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> solution.maxArea(heights1) <span class="op">==</span> <span class="dv">49</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> solution.maxArea(heights2) <span class="op">==</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1eea74b0-1028-4a3e-90c5-7b8950e6fb6d" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> maxArea(<span class="va">self</span>, heights: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        max_area <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        l <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        r <span class="op">=</span> <span class="bu">len</span>(heights) <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> l <span class="op">&lt;</span> r:</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            area <span class="op">=</span> (r <span class="op">-</span> l) <span class="op">*</span> <span class="bu">min</span>(heights[l], heights[r])</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            max_area <span class="op">=</span> <span class="bu">max</span>(max_area, area)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> heights[l] <span class="op">&lt;</span> heights[r]:</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                l <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                r <span class="op">-=</span> <span class="dv">1</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> max_area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This problem is fairly easy if you’re familiar with a stack, but more difficult otherwise. I added a check for odd numbered strings to return early, which give a little performance boost. The solution above beats around 87% of LeetCode submission on runtime.</p>
+<p>Just fun, I thought I’d try out Python’s <code>match case</code> statement. It’s new in Python 3.10 and could potentially give us another slight performance increase.</p>
+<div id="6423444b-71ee-480e-9859-eb53a52cfb29" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> isValid(<span class="va">self</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(s) <span class="op">&amp;</span> <span class="dv">1</span>: </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        stack <span class="op">=</span> []</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        valid_pairs <span class="op">=</span> {<span class="st">')'</span>: <span class="st">'('</span>, <span class="st">']'</span>: <span class="st">'['</span>, <span class="st">'}'</span>: <span class="st">'{'</span>}</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> char <span class="kw">in</span> s:</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">match</span> char:</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">case</span> <span class="st">'('</span> <span class="op">|</span> <span class="st">'['</span> <span class="op">|</span> <span class="st">'{'</span>:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                    stack.append(char)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">case</span> closing <span class="cf">if</span> closing <span class="kw">in</span> valid_pairs:</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> <span class="kw">not</span> stack <span class="kw">or</span> stack.pop() <span class="op">!=</span> valid_pairs[closing]:</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">not</span> stack</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="820fa2bd-7c6d-491e-a459-b6aa5f2ab581" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>heights1 <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="dv">7</span>]</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>heights2 <span class="op">=</span> [<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>]</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> solution.maxArea(heights1) <span class="op">==</span> <span class="dv">49</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> solution.maxArea(heights2) <span class="op">==</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="864cbd19-fa60-45e8-a996-335fb4eea76c" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tests</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">"({[]})"</span>))  <span class="co"># True</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">"([)]"</span>))  <span class="co"># False</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">"(("</span>))  <span class="co"># False</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.isValid(<span class="st">")"</span>))  <span class="co"># False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+False
+False
+False</code></pre>
 </div>
-</section>
-<section id="initial-results" class="level2">
-<h2 class="anchored" data-anchor-id="initial-results">Initial Results</h2>
-<p>My inital brute force solution passed NeetCode. However, with <span class="math inline">\(O(n^2)\)</span> time complexity, it’s insufficient for LeetCode. The next attempt was a two-pointer solution, with worst-case complexity of:</p>
+</div>
+<p>This solution ran in 23 ms on LeetCode and beat 98.7% of submissions on runtime. I’m not sure I trust LeetCode’s timings completely though. I played around with <code>timeit</code>, which suggested it runs slower, at least with a limited test set (including a test of 7000 repeating brakets/parentheses).</p>
+<p>To save a tiny fraction of memory, you could delete the <code>valid_pairs</code> dictionary and directly match each parenthesis/bracket. For example, with variations of the code below for each different type. It’s a little more readable but would be repetitive. It also ran a little slower on LeetCode too for whatever reason, perhaps a dictionary lookup is quicker.</p>
+<pre><code>match char:
+    case ')':
+        if not stack or stack.pop() != '(':
+            return False</code></pre>
+<p>LeetCode’s results can be quite variable; however, the <code>match case</code> approach was generally faster there. I also tried using <code>stack = deque()</code> instead of a list, which improved some of my attempts but not the final one above.</p>
+<p>The worst-case complexity for both solutions above is as follows:</p>
 <ul>
-<li>Time complexity: <span class="math inline">\(O(n)\)</span> as the pointers traverse the input list only once</li>
-<li>Space complexity: <span class="math inline">\(O(1)\)</span> as no additional space is used that would grow with input size</li>
+<li>Time complexity: <span class="math inline">\(O(n)\)</span> for the single loop</li>
+<li>Space complexity: <span class="math inline">\(O(n)\)</span> for the stack</li>
 </ul>
 </section>
 <section id="neetcode-solution" class="level2">
 <h2 class="anchored" data-anchor-id="neetcode-solution">NeetCode Solution</h2>
-<p>NeetCode’s solution is basically the same as that shown above. To be fair, I originally had <code>if</code>, <code>elif</code>, and <code>else</code> statements for the <code>&lt;</code>, <code>&gt;</code>, and <code>==</code> conditions, but as the outcomes of the <code>elif</code> and <code>else</code> branches were exactly the same, they could be combined.</p>
+<p>NeetCode’s approach was basically the same, except for the lack of early exit for odd numbered strings. He also used <code>stack[-1]</code> rather than <code>stack.pop()</code>. It’s the same idea though.</p>
 
 
 </section>
