@@ -297,7 +297,7 @@ False
 False</code></pre>
 </div>
 </div>
-<p>This problem is fairly easy if you’re familiar with a stack, but more difficult otherwise. I added a check for odd numbered strings to return early, which give a little performance boost. The solution above beats around 87% of LeetCode submission on runtime.</p>
+<p>This problem is fairly easy if you’re familiar with a stack, but more difficult otherwise. I added a check for odd numbered strings to return early, which gave a little performance boost. The solution above beats around 87% of LeetCode submission on runtime.</p>
 <p>Just fun, I thought I’d try out Python’s <code>match case</code> statement. It’s new in Python 3.10 and could potentially give us another slight performance increase.</p>
 <div id="6423444b-71ee-480e-9859-eb53a52cfb29" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
@@ -331,7 +331,7 @@ False
 False</code></pre>
 </div>
 </div>
-<p>This solution ran in 23 ms on LeetCode and beat 98.7% of submissions on runtime. I’m not sure I trust LeetCode’s timings completely though. I played around with <code>timeit</code>, which suggested it runs slower, at least with a limited test set (including a test of 7000 repeating brakets/parentheses).</p>
+<p>This solution ran in 23 ms on LeetCode and beat 98.7% of submissions on runtime. I’m not sure I trust LeetCode’s timings completely though. I played around with <code>timeit</code>, which suggested it runs slower, at least with a very limited test set (the above tests plus a test of 7000 repeating brakets/parentheses).</p>
 <p>To save a tiny fraction of memory, you could delete the <code>valid_pairs</code> dictionary and directly match each parenthesis/bracket. For example, with variations of the code below for each different type. It’s a little more readable but would be repetitive. It also ran a little slower on LeetCode too for whatever reason, perhaps a dictionary lookup is quicker.</p>
 <pre><code>match char:
     case ')':
