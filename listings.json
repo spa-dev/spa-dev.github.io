@@ -3,6 +3,7 @@
     "listing": "/dsa.html",
     "items": [
       "/dsaposts/buy-sell-stock/BuySellStock.html",
+      "/dsaposts/trap-rain-water/TrapRainWater.html",
       "/dsaposts/valid-parens/ValidParens.html",
       "/dsaposts/max-water-container/MaxWaterContainer.html",
       "/dsaposts/three-sum/ThreeIntegerSum.html",

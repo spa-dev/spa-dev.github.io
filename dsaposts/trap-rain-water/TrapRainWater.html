@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="spa-dev">
-<meta name="dcterms.date" content="2024-05-28">
+<meta name="dcterms.date" content="2024-09-30">
 
-<title>spa-dev - LeetCode 217: Contains Duplicate</title>
+<title>spa-dev - LeetCode 42: Trapping Rain Water</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,6 +105,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -161,11 +190,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">LeetCode 217: Contains Duplicate</h1>
+      <h1 class="title">LeetCode 42: Trapping Rain Water</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
-                <div class="quarto-category">arrays and hashing</div>
-                <div class="quarto-category">easy</div>
+                <div class="quarto-category">two pointers</div>
+                <div class="quarto-category">hard</div>
               </div>
                   </div>
   </div>
@@ -183,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 28, 2024</p>
+        <p class="date">September 30, 2024</p>
       </div>
     </div>
     
@@ -200,7 +229,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#problem-description" id="toc-problem-description" class="nav-link active" data-scroll-target="#problem-description">Problem Description</a></li>
-  <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a></li>
+  <li><a href="#initial-solution" id="toc-initial-solution" class="nav-link" data-scroll-target="#initial-solution">Initial Solution</a>
+  <ul class="collapse">
+  <li><a href="#test-function" id="toc-test-function" class="nav-link" data-scroll-target="#test-function">Test function</a></li>
+  </ul></li>
+  <li><a href="#initial-results" id="toc-initial-results" class="nav-link" data-scroll-target="#initial-results">Initial Results</a></li>
+  <li><a href="#final-results" id="toc-final-results" class="nav-link" data-scroll-target="#final-results">Final Results</a></li>
   <li><a href="#neetcode-solution" id="toc-neetcode-solution" class="nav-link" data-scroll-target="#neetcode-solution">NeetCode Solution</a></li>
   </ul>
 </nav>
@@ -214,63 +248,193 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
-<p>Difficulty: <span style="color:green"><strong>Easy</strong></span></p>
-<p>Given an integer array <code>nums</code>, return <code>True</code> if any value appears more than once in the array, otherwise return <code>False</code>.</p>
+<p>Difficulty: <span style="color:red"><strong>Hard</strong></span></p>
+<p>You are given an array of non-negative integers <code>height</code>, where each element <code>height[i]</code> indicates the height of a vertical bar of width 1. Determine the maximum volume of water that can be contained between these bars assuming equal rainfall from above.</p>
 <p><strong>Example 1:</strong></p>
-<p><code>Input: nums = [1, 2, 3, 3]</code></p>
-<p><code>Output: True</code></p>
+<pre><code>Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6</code></pre>
+<p>Explanation: See image on the <a href="https://leetcode.com/problems/trapping-rain-water/description">LeetCode website</a>. There a 3 areas in which rain water would collect, with an area of 1, 4, and 1 units, respectively.</p>
 <p><strong>Example 2:</strong></p>
-<p><code>Input: nums = [1, 2, 3, 4]</code></p>
-<p><code>Output: False</code></p>
+<pre><code>Input: height = [4,2,0,3,2,5]
+Output: 9
+</code></pre>
+<p><strong>Constraints:</strong></p>
+<pre><code># NeetCode:
+1 &lt;= height.length &lt;= 1000
+0 &lt;= height[i] &lt;= 1000
+
+# LeetCode:
+1 &lt;= height.length &lt;= 20000
+0 &lt;= height[i] &lt;= 100000</code></pre>
 </section>
 <section id="initial-solution" class="level2">
 <h2 class="anchored" data-anchor-id="initial-solution">Initial Solution</h2>
-<p>This was really quite easy, using the Python <code>set()</code> function to create a set of unique numbers. We just need to ensure it returns <code>True</code> if the amount (length) of numbers in the set is different to that of the original list. Hence, the <code>not</code> operator is used below. Alternatively, replace <code>==</code> with <code>!=</code> for the same result.</p>
-<p>Note that <code>set()</code> will not retain the order of the list, so we must compare its overall length and not try to compare the content one-by-one (or convert it to a list and see if the two lists match exactly).</p>
-<div id="a9fd395a" class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="19bce42e-b7a5-4598-be48-e881d18f333e" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="5c877d96" class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> InitialSolution:</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> hasDuplicate(<span class="va">self</span>, nums: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">not</span> <span class="bu">len</span>(<span class="bu">set</span>(nums)) <span class="op">==</span> <span class="bu">len</span>(nums)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b4b09f7b-281c-4ade-b3bb-22a30a2854a5" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BruteForceSolution:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> trap(<span class="va">self</span>, height: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        total_area <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> <span class="bu">len</span>(height)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">-</span> <span class="dv">1</span>):  <span class="co"># Start from 1 and go to n-2 to avoid edges</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            left_max <span class="op">=</span> <span class="bu">max</span>(height[:x])  <span class="co"># Maximum height to the left of x</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            right_max <span class="op">=</span> <span class="bu">max</span>(height[x <span class="op">+</span> <span class="dv">1</span>:])  <span class="co"># Maximum height to the right of x</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate water trapped on the current block</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            water_trapped <span class="op">=</span> <span class="bu">min</span>(left_max, right_max) <span class="op">-</span> height[x]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> water_trapped <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                total_area <span class="op">+=</span> water_trapped</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> total_area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="254a890c" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nums1 <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>nums2 <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>My brute force solution passed NeetCode. However, with <span class="math inline">\(O(n^2)\)</span> time complexity, it’s insufficient for LeetCode. It passed 322 of 323 test cases on LeetCode, but timed out on the last test. The algorithm calls <code>max()</code> repeatedly within the loop, resulting in quadratic time complexity.</p>
+<p>We can improve it a little by trading off some space for time. In the solution below, two additional lists are used to store the maximum to the left and right of the ‘height’ value at <code>x</code>.</p>
+<div id="77b3a3fe-7e43-4f58-9996-f80c67f1c960" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> trap(<span class="va">self</span>, height: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        total_area <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> <span class="bu">len</span>(height)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="dv">2</span>:  <span class="co"># Less than 3 heights can't trap any water</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create lists to store the maximums</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        left_max <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> n</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        right_max <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> n</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store the maximum heights at the two edges</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        left_max[<span class="dv">0</span>] <span class="op">=</span> height[<span class="dv">0</span>]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        right_max[n <span class="op">-</span> <span class="dv">1</span>] <span class="op">=</span> height[n <span class="op">-</span> <span class="dv">1</span>]</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Store the maximum heights left and right of each position</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># working forwards and backwards in the same loop for efficiency</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>            left_max[x] <span class="op">=</span> <span class="bu">max</span>(left_max[x <span class="op">-</span> <span class="dv">1</span>], height[x])</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            right_max[n <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> x] <span class="op">=</span> <span class="bu">max</span>(right_max[n <span class="op">-</span> x], height[n <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> x])</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculate water trapped</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>            water_trapped <span class="op">=</span> <span class="bu">min</span>(left_max[x], right_max[x]) <span class="op">-</span> height[x]</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> water_trapped <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>                total_area <span class="op">+=</span> water_trapped</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> total_area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ed4f77ac" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> InitialSolution()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.hasDuplicate(nums1))</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.hasDuplicate(nums2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="test-function" class="level3">
+<h3 class="anchored" data-anchor-id="test-function">Test function</h3>
+<div id="08001fc7-be8f-4d1f-b2b2-1631eecdc8ef" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_trap(solution_class):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Test function for the trap method. Not extensive"""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    heights0 <span class="op">=</span> [<span class="dv">0</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    heights1 <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    heights2 <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    heights3 <span class="op">=</span> [<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    heights_list <span class="op">=</span> [heights0, heights1, heights2, heights3]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    expected <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">9</span>]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    solution <span class="op">=</span> solution_class()</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> [solution.trap(heights) <span class="cf">for</span> heights <span class="kw">in</span> heights_list]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> results <span class="op">==</span> expected:</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tests passed"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Tests failed"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Expected:"</span>, expected)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Got:"</span>, results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Initial Results</strong></p>
-<p>Success. This solution passes the full suite of tests on NeetCode.</p>
+<div id="f51c888b-f8c5-4315-b0c5-456c9b2d832b" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>test_trap(BruteForceSolution)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>test_trap(Solution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tests passed
+Tests passed</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="initial-results" class="level2">
+<h2 class="anchored" data-anchor-id="initial-results">Initial Results</h2>
+<p>The latter attempt passed LeetCode but with an abysmal runtime beating only 20.5% of submissions. Memory use was also poor, beating only 32.5% of submissions.</p>
+<p>The overall worst-case complexity here is:</p>
+<ul>
+<li>Time complexity: <span class="math inline">\(O(n)\)</span> consisting of two loops each in <span class="math inline">\(O(n)\)</span> time</li>
+<li>Space Complexity: <span class="math inline">\(O(n)\)</span> due to the two additional lists of <span class="math inline">\(O(n)\)</span> space</li>
+</ul>
+<p>Let’s try to improve on the solution using a two-pointer algorithm…</p>
+<div id="3465efb8-bd08-4f03-a620-bd3620425159" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> trap(<span class="va">self</span>, height: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> <span class="bu">len</span>(height)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="dv">2</span>: </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        left <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        right <span class="op">=</span> <span class="bu">len</span>(height) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        left_max <span class="op">=</span> height[left]</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        right_max <span class="op">=</span> height[right]</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        water <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> left <span class="op">&lt;</span> right:</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> left_max <span class="op">&lt;</span> right_max:</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                left <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                left_max <span class="op">=</span> <span class="bu">max</span>(left_max, height[left])</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                water <span class="op">+=</span> left_max <span class="op">-</span> height[left]</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                right <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                right_max <span class="op">=</span> <span class="bu">max</span>(right_max, height[right])</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>                water <span class="op">+=</span> right_max <span class="op">-</span> height[right]</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> water</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="2119f979-8c5e-42bc-985f-5d1cce55b6b3" class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>test_trap(Solution)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tests passed</code></pre>
+</div>
+</div>
+</section>
+<section id="final-results" class="level2">
+<h2 class="anchored" data-anchor-id="final-results">Final Results</h2>
+<p>This two-pointer solution was a lot better and apparently beat 99.8% of submissions on time and 97.6% on memory. LeetCode’s results tend to vary a little, so I don’t fully believe them. A real comparison using <code>timeit</code> would likely be more accurate. I also tried to avoid storing the additional variable <code>n</code>, by placing that definition <code>len(height)</code> into the next line instead, but it then ran marginally slower (11 ms). In any case, this was a nice attempt.</p>
+<p>Worst-case complexity is:</p>
+<ul>
+<li>Time complexity: <span class="math inline">\(O(n)\)</span> as the pointers traverse the input list only once</li>
+<li>Space complexity: <span class="math inline">\(O(1)\)</span> as no additional space is used that would grow with input size</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="TrapRainWater_files/figure-html/537669f5-3750-4cb3-a51c-3897b45b26d2-1-2f53a2c3-1f96-4c5c-b097-2d700053a106.png" class="img-fluid figure-img"></p>
+<figcaption>LeetCodeSubmission-1.png</figcaption>
+</figure>
+</div>
 </section>
 <section id="neetcode-solution" class="level2">
 <h2 class="anchored" data-anchor-id="neetcode-solution">NeetCode Solution</h2>
-<p>The following code makes it clear that we are using a hashset to store the values. It does not create the entire set all at once (like we do above, always giving O(n) time complexity as it runs through the whole list). Instead, it goes step by step; thus only in the worst case would this be O(n). We must create the hashset, which in the worst case uses O(n) space.</p>
-<div id="fda5fc54" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> hasDuplicate(<span class="va">self</span>, nums: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        hashset <span class="op">=</span> <span class="bu">set</span>()</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> n <span class="kw">in</span> nums:</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> n <span class="kw">in</span> hashset:</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            hashset.add(n)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ac75a11e-dfd0-48f0-a3c3-3cae8f6a0110" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Solution:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> trap(<span class="va">self</span>, height: List[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> height:</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        l, r <span class="op">=</span> <span class="dv">0</span>, <span class="bu">len</span>(height) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        leftMax, rightMax <span class="op">=</span> height[l], height[r]</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> l <span class="op">&lt;</span> r:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> leftMax <span class="op">&lt;</span> rightMax:</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                l <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                leftMax <span class="op">=</span> <span class="bu">max</span>(leftMax, height[l])</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                res <span class="op">+=</span> leftMax <span class="op">-</span> height[l]</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>                r <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>                rightMax <span class="op">=</span> <span class="bu">max</span>(rightMax, height[r])</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>                res <span class="op">+=</span> rightMax <span class="op">-</span> height[r]</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="81eef7be" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>solution <span class="op">=</span> Solution()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.hasDuplicate(nums1))</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(solution.hasDuplicate(nums2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Conclusion</strong></p>
-<p>An easy start to NeetCode problems. The solution has a worst-case complexity of:</p>
-<ul>
-<li>Time complexity: O(n)</li>
-<li>Space complexity: O(n)</li>
-</ul>
+<p>Neetcode’s solution has slightly different code for early exit, but the main algorithm is essentially the same. Worst-case time and space complexity are the same too.</p>
 
 
 </section>
