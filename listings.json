@@ -2,6 +2,8 @@
   {
     "listing": "/dsa.html",
     "items": [
+      "/dsaposts/search-2D-matrix/Search2Dmatrix.html",
+      "/dsaposts/binary-search/BinarySearch.html",
       "/dsaposts/buy-sell-stock/BuySellStock.html",
       "/dsaposts/trap-rain-water/TrapRainWater.html",
       "/dsaposts/min-stack/MinStack.html",
